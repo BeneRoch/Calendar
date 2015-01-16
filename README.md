@@ -39,7 +39,6 @@ Name							| Description
  `doc`							| Returns appropriate documentation for the specified option in the list below
 
 ## Options
-
 Name							| Type			|	Description
 --------------------------------|----------------------------------------------------------------------------------------------------------------------------
  `startDate` 					|	Date Object	|	Current display date ( Default: current_date )
