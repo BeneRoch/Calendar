@@ -1,13 +1,13 @@
- #Calendar
+#Calendar
 
- ##Description
- Home made calendar that covers events and datepicking. Every event on a day in the calendar
- returns a date object of the current target.  Note that even the header triggers these events,
- with a `null` object as a date.
+##Description
+Home made calendar that covers events and datepicking. Every event on a day in the calendar
+returns a date object of the current target.  Note that even the header triggers these events,
+with a `null` object as a date.
 
- For date picking, you can add a `onDayClick` event and then manage the date object. ( @see `onDayClick` option below )
- Events are passed as a JSON object and each requires a title and a date. The date parameter is `mixed`, which means it
- can be a string, a timestamp or an object.  It'll be an object if the event has a beginning and an end.
+For date picking, you can add a `onDayClick` event and then manage the date object. ( @see `onDayClick` option below )
+Events are passed as a JSON object and each requires a title and a date. The date parameter is `mixed`, which means it
+can be a string, a timestamp or an object.  It'll be an object if the event has a beginning and an end.
 
  ###Simple date
  ```
