@@ -40,7 +40,7 @@ Name							| Description
 
 ## Options
 Name							| Type			|	Description
---------------------------------|----------------------------------------------------------------------------------------------------------------------------
+--------------------------------|---------------|------------------------------------------------------------------------------------------------------------
  `startDate` 					|	Date Object	|	Current display date ( Default: current_date )
  `lang` 						|	string		|	Current display language
  `useControls					|	boolean		|	Auto output the controls for next and prev month if set to true (default: true)
@@ -48,7 +48,7 @@ Name							| Type			|	Description
 
 ### translations
 Name							| Type			|	Description
---------------------------------|----------------------------------------------------------------------------------------------------------------------------
+--------------------------------|---------------|------------------------------------------------------------------------------------------------------------
  	`months`					|	object		|	Labels for months, by lang, in an array starting from JANUARY to DECEMBER
  	`days`						|	object		|	Labels for days, by lang, in an array starting from SUNDAY to SATURDAY
  	`nextMonthLabel`			|	object		|	Labels for skip month's title, by lang, in an array (view default)
@@ -56,7 +56,7 @@ Name							| Type			|	Description
 
 ### classes
 Name							| Type			|	Description
---------------------------------|----------------------------------------------------------------------------------------------------------------------------
+--------------------------------|---------------|------------------------------------------------------------------------------------------------------------
 	`mainCalendarClass`			|	string		|	The main calendar class, set on the DIV object that wraps it all
 	`calendarTitleClass`		|	string		|	The calendar title class, set on the H1 object
 	`calendarControlsClass`		|	string		|	The calendar controls wrapper class, set on the DIV object that wraps controls
@@ -75,7 +75,7 @@ Name							| Type			|	Description
 
 ### callbacks
 Name							| Type			|	Description
---------------------------------|----------------------------------------------------------------------------------------------------------------------------
+--------------------------------|---------------|------------------------------------------------------------------------------------------------------------
 	`onDayMouseOver`			|	function	|	Triggered when moving mouse over a day
 	`onEventMouseOver`			|	function	|	Triggered when moving mouse over a day with an event
 	`onDayMouseOut`				|	function	|	Triggered when moving mouse out of a day
