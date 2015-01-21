@@ -75,13 +75,13 @@
 *	`onEventClick`				|	function	|	Triggered when clicking on a day with an event
 *	`onPrev`					|	function	|	Triggered when clicking on the previous button / Added to the regular event @see changeMonth
 *	`onNext`					|	function	|	Triggered when clicking on the next button / Added to the regular event @see changeMonth
+*	`onChangeMonth`				|	function	|	Triggered after a new month has been loaded
 *
 *	Return self (Calendar object)
 */
 
 (function($){
 	 $.fn.calendar = function(options, more) {
-
 	 	// If there's already a calendar, maybe we want to access the API.
 	 	var calendar = $(this).data('calendar');
 
@@ -109,6 +109,16 @@
 	 				case 'doc' :
 		 				if (more) {
 		 					calendar.doc(more);
+		 				}
+	 				break;
+
+	 				// Adds events
+	 				// In that case, `more` is an event json
+	 				case 'events' :
+		 				if (more) {
+		 					calendar.opts.events = more;
+		 					calendar.loadEvents();
+		 					calendar.load();
 		 				}
 	 				break;
 	 			}
@@ -146,7 +156,7 @@
 		 		calendarEmptyDayClass : 'calendar__day--empty' // When no number
 		 	},
 		 	callbacks: {
-		 		changeMonth : function(calendar) {
+		 		onChangeMonth : function(calendar) {
 
 		 		},
 		 		onDayClick : function(date, calendar) {
@@ -156,16 +166,16 @@
 
 		 		},
 		 		onDayMouseover : function(datas, calendar) { // Days with event
-		 			console.debug(datas, 'day');
+
 		 		},
 		 		onEventMouseover : function(datas, calendar) { // Days with event
-		 			console.debug(datas, 'event');
+
 		 		},
 		 		onDayMouseout : function(datas, calendar) { // Days with event
-		 			console.log(datas);
+
 		 		},
 		 		onEventMouseout : function(datas, calendar) { // Days with event
-		 			console.log(datas);
+
 		 		},
 		 		onPrev : function(calendar) {
 
@@ -197,20 +207,20 @@
 	 	};
 
 	 	// Merge options
-	 	var opts = $.extend(defaults, options);
+	 	var opts = $.extend(true, defaults, options);
 
 	 	// Instanciation
 		var Charcoal_Calendar = new bCalendar(opts);
-		Charcoal_Calendar.target = $(this);
 
+		Charcoal_Calendar.target = $(this);
+		Charcoal_Calendar.load()
 		// Generate HTML
-		Charcoal_Calendar.generateHTML();
+		// Charcoal_Calendar.generateHTML();
 
 		// Append HTML
-		Charcoal_Calendar.target.html(Charcoal_Calendar.getHTML());
+		// Charcoal_Calendar.target.html(Charcoal_Calendar.getHTML());
 
-		Charcoal_Calendar.addListeners();
-		$(this).data('calendar',Charcoal_Calendar);
+		// Charcoal_Calendar.addListeners();
 		return Charcoal_Calendar;
 	}
 })(jQuery);
@@ -249,6 +259,49 @@ var bCalendar = function(opts) {
 	// Events
 	this.events = {};
 
+	this.loadEvents();
+
+	this.html = '';
+
+	return this;
+}
+
+/**
+* Load listeners and all
+* Make sure no duplication is done.
+*
+*/
+bCalendar.prototype.load = function()
+{
+	var options = this.opts;
+	// Make sure no duplication of event is done.
+	this.destroy();
+
+	// Keep datas
+	this.opts = options;
+
+	// Generate HTML
+	this.generateHTML();
+
+	// Append HTML
+	this.target.html(this.getHTML());
+	this.target.data('calendar',this);
+
+	this.addListeners();
+
+	return this;
+}
+
+/**
+* Load news events, or current events
+* Uses this.opts.events
+*
+* @return this (chainable)
+*/
+bCalendar.prototype.loadEvents = function()
+{
+	this.events = [];
+	var opts = this.opts;
 
 	if (typeof opts.events == 'object') {
 		for (var i = 0; i < opts.events.length; i++) {
@@ -256,7 +309,6 @@ var bCalendar = function(opts) {
 			if (typeof opts.events[i]['date'] == "object") {
 				var first_date = new Date(opts.events[i]['date'].start);
 				var last_date = new Date(opts.events[i]['date'].end);
-				multi_date = first_date < last_date;
 			} else {
 				var first_date = new Date(opts.events[i]['date']);
 				var last_date = first_date;
@@ -288,10 +340,11 @@ var bCalendar = function(opts) {
 	this.month =  (isNaN(opts.month) || opts.month == null) ? this.current_date.getMonth() : opts.month;
 	this.year = (isNaN(opts.year) || opts.year == null) ? this.current_date.getFullYear() : opts.year;
 
-	this.html = '';
-
 	return this;
+
 }
+
+
 
 /**
 * Generates the HTML considering all the events and options
@@ -366,10 +419,6 @@ bCalendar.prototype.generateHTML = function(){
 			var event = this.getEventsByDate(''+this.year+'/'+(this.month+1)+'/'+day);
 
 
-			var has_event = !jQuery.isEmptyObject(event);
-			var extra_class = has_event ?' '+opts.classes.calendarEventclass:'';
-
-
 			/*
 			*	@TODO -> MULTIPLE URL (in bubble perhaps)
 			*/
@@ -394,6 +443,9 @@ bCalendar.prototype.generateHTML = function(){
 			}
 
 			var has_day = day <= monthLength && (i > 0 || j >= startingDay);
+
+			var has_event = !jQuery.isEmptyObject(event) && has_day;
+			var extra_class = has_event ?' '+opts.classes.calendarEventclass:'';
 
 			html += '<td class="'+opts.classes.calendarDayClass+''+ ( has_day ? '':' '+opts.classes.calendarEmptyDayClass+'' )+ extra_class +'"  data-date="'+ ( has_day ? this.year + '/' + (this.month+1) +'/'+day : 0 ) +'" title="'+title.join(this.opts.eventSeparator)+'" data-description="'+contents.join(this.opts.eventSeparator)+'" data-href="'+url.join(this.opts.eventSeparator)+'">';
 			html += '<a class="'+opts.classes.calendarLinkClass+'" href="#"><span class="'+opts.classes.calendarTextClass+'">';
@@ -556,39 +608,10 @@ bCalendar.prototype._eventDatas = function(elem)
 		return { date : null, events : [] }
 	}
 	date = new Date(date);
-	var sep = this.opts.eventSeparator;
-
-	// Base
-	var title = elem.attr('title');
-	var content = elem.data('description');
-	var href = elem.data('href');
-
-
-	// Format
-	var titles = title.split(sep);
-	var contents = content.split(sep);
-	var hrefs = href.split(sep);
-
-	var count = titles.length; // Titles are REQUIRED..
-	var i = 0;
-
-	var datas = [];
-
-	if (title) { // At least on event.
-		for (; i < count; i++) {
-			datas.push({
-				title : titles[ i ],
-				content : contents[ i ],
-				href : hrefs[ i ],
-				date : date
-			});
-		}
-	}
-
 
 	var ret = {
 		date : date,
-		events : datas
+		events : this.getEventsByDate(date)
 	}
 
 	// Return
@@ -686,7 +709,7 @@ bCalendar.prototype.refresh = function() {
 		that.generateHTML();
 		that.target.html(that.getHTML()).fadeTo(400,1);
 
-		that.opts.callbacks.changeMonth(that);
+		that.opts.callbacks.onChangeMonth(that);
 
 	});
 
@@ -851,6 +874,10 @@ bCalendar._doc = {
 			onEventClick : {
 				type : 'function',
 				description: 'Triggered when clicking on a day with an event'
+			},
+			onChangeMonth : {
+				type : 'function',
+				description: 'Triggered after a new month has been loaded'
 			},
 			onPrev : {
 				type : 'function',
