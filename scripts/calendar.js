@@ -65,6 +65,7 @@
 *	`calendarEventStartclass`	|	string		|	The calendar event class, set on the <td> wrapping the day an event starts
 *	`calendarEventEndclass`		|	string		|	The calendar event class, set on the <td> wrapping the day an event ends
 *	`calendarEmptyDayClass`		|	string		|	The calendar empty day class, set on the <td> wrapping a day with no date
+*	`currentDayClass`			|	string		|	The calendar current day class, set on the <td> wrapping today's date
 *
 * `callbacks`					|	object		|	Contains all possible callbacks
 *	`onDayMouseOver`			|	function	|	Triggered when moving mouse over a day
@@ -132,6 +133,7 @@
 	 	*/
 	 	var defaults = {
 	 		startDate : new Date(),
+	 		today : new Date(),
 	 		lang : 'fr',
 	 		useControls : true,
 	 		events : {},
@@ -151,6 +153,7 @@
 		 		calendarLinkClass : 'calendar__link',
 		 		calendarTextClass : 'calendar__text',
 		 		calendarEventclass : 'calendar__day--event',
+		 		currentDayClass : 'calendar__day--today',
 		 		calendarEventStartclass : 'calendar__day--event--start',
 		 		calendarEventEndclass : 'calendar__day--event--end',
 		 		calendarEmptyDayClass : 'calendar__day--empty' // When no number
@@ -446,6 +449,10 @@ bCalendar.prototype.generateHTML = function(){
 
 			var has_event = !jQuery.isEmptyObject(event) && has_day;
 			var extra_class = has_event ?' '+opts.classes.calendarEventclass:'';
+
+			if (opts.today.getFullYear() == this.year && opts.today.getMonth() == this.month && opts.today.getDate() == day) {
+				extra_class += ' '+opts.classes.currentDayClass;
+			}
 
 			html += '<td class="'+opts.classes.calendarDayClass+''+ ( has_day ? '':' '+opts.classes.calendarEmptyDayClass+'' )+ extra_class +'"  data-date="'+ ( has_day ? this.year + '/' + (this.month+1) +'/'+day : 0 ) +'" title="'+title.join(this.opts.eventSeparator)+'" data-description="'+contents.join(this.opts.eventSeparator)+'" data-href="'+url.join(this.opts.eventSeparator)+'">';
 			html += '<a class="'+opts.classes.calendarLinkClass+'" href="#"><span class="'+opts.classes.calendarTextClass+'">';
@@ -841,6 +848,10 @@ bCalendar._doc = {
 			calendarEmptyDayClass : {
 				type : 'String',
 				description : 'The calendar empty day class, set on the <td> wrapping a day with no date'
+			},
+			currentDayClass : {
+				type : 'String',
+				description : 'The calendar current day class, set on the <td> wrapping today\'s date'
 			}
 		}
 	},
