@@ -43,6 +43,7 @@ Name							| Type			|	Description
 --------------------------------|---------------|------------------------------------------------------------------------------------------------------------
  `startDate` 					|	Date Object	|	Current display date ( Default: current_date )
  `lang` 						|	string		|	Current display language
+ `mode` 						|	string		|	Current display mode. Either month or date ( Default: date )
  `useControls					|	boolean		|	Auto output the controls for next and prev month if set to true (default: true)
  `events`						|	object		|	JSON of all the events - Events can have pretty much any data, but requires at least a title and a date
 
@@ -53,6 +54,8 @@ Name							| Type			|	Description
  	`days`						|	object		|	Labels for days, by lang, in an array starting from SUNDAY to SATURDAY
  	`nextMonthLabel`			|	object		|	Labels for skip month's title, by lang, in an array (view default)
  	`prevMonthLabel`			|	object		|	Labels for skip month's title, by lang, in an array (view default)
+ 	`nextYearLabel`				|	object		|	Labels for skip year's title, by lang, in an array (view default)
+ 	`prevYearLabel`				|	object		|	Labels for skip year's title, by lang, in an array (view default)
 
 ### classes
 Name							| Type			|	Description
@@ -66,6 +69,7 @@ Name							| Type			|	Description
 	`calendarTableHeaderClass`	|	string		|	The calendar table header class, set on the TR object that contains the day's labels
 	`calendarRowClass`			|	string		|	The calendar row class, set on all the other TR object as opposed to 'calendarTableHeaderClass'
 	`calendarDayClass`			|	string		|	The calendar day class, set on all TD inside the calendar (ALSO in the header)
+	`calendarMonthClass`		|	string		|	The calendar month class, set on all TD inside the calendar (ALSO in the header)
 	`calendarLinkClass`			|	string		|	The calendar link class, set on the ANCHOR object inside a day
 	`calendarTextClass`			|	string		|	The calendar text class, set on the <span> object inside the <a> object of a day (calendarLinkClass)
 	`calendarEventclass`		|	string		|	The calendar event class, set on the TD wrapping the day with an event
@@ -82,6 +86,10 @@ Name							| Type			|	Description
 	`onEventMouseOut`			|	function	|	Triggered when moving mouse out of a day with an event
 	`onDayClick`				|	function	|	Triggered when clicking on a day
 	`onEventClick`				|	function	|	Triggered when clicking on a day with an event
-	`onPrev`					|	function	|	Triggered when clicking on the previous button / Added to the regular event @see changeMonth
-	`onNext`					|	function	|	Triggered when clicking on the next button / Added to the regular event @see changeMonth
+	`onPrev`					|	function	|	Triggered when clicking on the previous button while in date mode / Added to the regular event @see changeMonth
+	`onPrevYear`				|	function	|	Triggered when clicking on the previous button while in month mode
+	`onNext`					|	function	|	Triggered when clicking on the next button while in date mode / Added to the regular event @see changeMonth
+	`onNextYear`				|	function	|	Triggered when clicking on the next button while in month mode
+	`onGotoMonthView`			|	function	|	Triggered after switching to the month view
+	`onGotoDateView`			|	function	|	Triggered after switching to the date view
 

@@ -235,6 +235,14 @@
 		 			en : 'Previous Month',
 		 			fr : 'Mois précédent'
 		 		}
+		 		nextYearLabel : {
+		 			en : 'Next Year',
+		 			fr : 'Année suivante'
+		 		},
+		 		prevYearLabel : {
+		 			en : 'Previous Year',
+		 			fr : 'Année précédente'
+		 		}
 		 	},
 		 	eventSeparator : '{|}'
 	 	};
@@ -538,8 +546,8 @@ bCalendar.prototype.generateMonthView = function() {
 	// Calendar Controls
 	if (opts.useControls) {
 		html += '<div class="'+opts.classes.calendarControlsClass+'">';
-		html += '<a href="#" class="'+opts.classes.calendarControlsPrevClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.prevMonthLabel[ this.lang ]+'"><use xlink:href="#icon-arrowleft"></use></svg></a>';
-		html += '<a href="#" class="'+opts.classes.calendarControlsNextClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.nextMonthLabel[ this.lang ]+'"><use xlink:href="#icon-arrowright"></use></svg></a>';
+		html += '<a href="#" class="'+opts.classes.calendarControlsPrevClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.prevYearLabel[ this.lang ]+'"><use xlink:href="#icon-arrowleft"></use></svg></a>';
+		html += '<a href="#" class="'+opts.classes.calendarControlsNextClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.nextYearLabel[ this.lang ]+'"><use xlink:href="#icon-arrowright"></use></svg></a>';
 		html += '</div>';
 	}
 
