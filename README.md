@@ -18,7 +18,7 @@ can be a string, a timestamp or an object.  It'll be an object if the event has 
  } ]
  ```
 
-## Complex date
+### Complex date
  ```
  [ {
 	date : {
@@ -29,6 +29,100 @@ can be a string, a timestamp or an object.  It'll be an object if the event has 
 	title : ''
  } ]
  ```
+
+### Multiple date formats
+ ```
+ [ {
+	date : {
+		start : '2015/1/10',
+		end : 'january 11 2015'
+	},
+	content : '',
+	title : ''
+ },{
+	date : 'september 24 2015',
+	content : '',
+	title : ''
+ } ]
+ ```
+## Easy to use
+The calendar is easy to use and only requires minimal options.  Everything is yet customizable.  The calendar builds himself on a DOM object (DIV) and fits the boundaries of that object.  Let's see some examples
+
+#### Given the following div:
+
+```
+<div id="calendar-widget"></div>
+```
+#### Build a french calendar (see default options)
+```
+$('#calendar-widget').calendar()
+```
+#### Build an english calendar
+```
+$('#calendar-widget').calendar({
+    lang : 'en'
+})
+```
+#### Add unsupported language
+```
+$('#calendar-widget').calendar({
+    lang : 'custom_lang',
+    translations: {
+    	months: {
+        	custom_lang : ['January', 'February', 'March', 'April','May', 'June', 'July', 'August', 'September','October', 'November', 'December']
+		 	},
+		 	days: {
+					custom_lang : ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+		 		},
+		 		nextMonthLabel : {
+		 			custom_lang : 'Next Month'
+		 		},
+		 		prevMonthLabel : {
+		 			custom_lang : 'Previous Month'
+		 		}
+		 		nextYearLabel : {
+		 			custom_lang : 'Next Year'
+		 		},
+		 		prevYearLabel : {
+		 			custom_lang : 'Previous Year'
+		 		}
+		 	}
+})
+```
+#### Start in month view display
+```
+$('#calendar-widget').calendar({
+    mode: 'month'
+})
+```
+#### Add events
+```
+$('#calendar-widget').calendar({
+    events : [
+	{
+		date:"2015/01/16",
+		title: 'Test title',
+		content : 'Well, turns out on that date we uploaded the plugin'
+	},
+		{
+		date:{
+            start: "2015/01/16",
+            end: "february 1 2015"
+        },
+			title: 'Doc title',
+			content : 'We also u"<>pdated the doc accordingly'
+		},
+		{
+			date:{
+				start : "2015/01/17",
+				end : "2015/01/27"
+			},
+			title: 'Changes',
+			content : 'We might add s\0ome changes during theses days'
+		}
+	]
+});
+```
 
 ## API
 Name							| Description

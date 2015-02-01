@@ -234,7 +234,7 @@
 		 		prevMonthLabel : {
 		 			en : 'Previous Month',
 		 			fr : 'Mois précédent'
-		 		}
+		 		},
 		 		nextYearLabel : {
 		 			en : 'Next Year',
 		 			fr : 'Année suivante'
@@ -344,7 +344,7 @@ bCalendar.prototype.loadEvents = function()
 	this.events = [];
 	var opts = this.opts;
 
-	opts.events = this.escapeDatas(opts.events);
+	// opts.events = this.escapeDatas(opts.events);
 
 	if (typeof opts.events == 'object') {
 		for (var i = 0; i < opts.events.length; i++) {
@@ -478,6 +478,8 @@ bCalendar.prototype.unescapeDatas = function(data) {
 bCalendar.prototype.generateHTML = function(){
 
 	var mode = this.opts.mode;
+
+	this.opts.events = this.escapeDatas(this.opts.events);
 
 	switch (mode) {
 		case 'date':
@@ -844,6 +846,26 @@ bCalendar.prototype.changeMonth = function(dir)
 }
 
 /**
+* Unique function to switch between years
+* Accepts any number
+*
+* @param int
+* @return {Object} this (chainable)
+*/
+bCalendar.prototype.changeYear = function(dir)
+{
+	// Using '-1 and 1' as directions
+	var direction = (dir == undefined || dir > 0)?1:-1;
+
+	this.year = this.year + dir;
+
+	// Refresh View
+	this.refresh();
+
+	return this;
+}
+
+/**
 * Triggers the calendar to change date to a specific date.
 * Multiple date formats
 * Examples:
@@ -938,7 +960,7 @@ bCalendar.prototype.addListeners = function() {
 	{
 		e.preventDefault();
 
-		var datas = that._eventDatas($(this));
+		var datas = that.unescapeDatas(that._eventDatas($(this)));
 		opts.callbacks.onDayMouseover(datas, that);
 
 	})
@@ -948,7 +970,7 @@ bCalendar.prototype.addListeners = function() {
 	{
 		e.preventDefault();
 
-		var datas = that._eventDatas($(this));
+		var datas = that.unescapeDatas(that._eventDatas($(this)));
 		opts.callbacks.onEventMouseover(datas, that);
 
 	})
@@ -958,7 +980,7 @@ bCalendar.prototype.addListeners = function() {
 	{
 		e.preventDefault();
 
-		var datas = that._eventDatas($(this));
+		var datas = that.unescapeDatas(that._eventDatas($(this)));
 		opts.callbacks.onEventMouseout(datas, that);
 
 	})
@@ -985,8 +1007,7 @@ bCalendar.prototype.addListeners = function() {
 			that.changeMonth(-1);
 		}
 		if (opts.mode == 'month') {
-			that.year--;
-			that.refresh();
+			that.changeYear(-1);
 			opts.callbacks.onPrevYear(that);
 		}
 
@@ -1003,8 +1024,7 @@ bCalendar.prototype.addListeners = function() {
 			that.changeMonth(1);
 		}
 		if (opts.mode == 'month') {
-			that.year++;
-			that.refresh();
+			that.changeYear(1);
 			opts.callbacks.onNextYear(that);
 		}
 	})
