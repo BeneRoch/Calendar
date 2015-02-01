@@ -42,6 +42,7 @@
 * `lang` 						|	string		|	Current display language
 * `useControls					|	boolean		|	Auto output the controls for next and prev month if set to true (default: true)
 * `events`						|	object		|	JSON of all the events - Events can have pretty much any data, but requires at least a title and a date
+* `mode`						|	string		|	Specifys the desired display type: Either Month or Date (default: date)
 *
 * `translations`				|	object		|   Contains all translations
 * 	`months`					|	object		|	Labels for months, by lang, in an array starting from JANUARY to DECEMBER
@@ -59,6 +60,7 @@
 *	`calendarTableHeaderClass`	|	string		|	The calendar table header class, set on the <tr> object that contains the day's labels
 *	`calendarRowClass`			|	string		|	The calendar row class, set on all the other <tr> object as opposed to 'calendarTableHeaderClass'
 *	`calendarDayClass`			|	string		|	The calendar day class, set on all <td> inside the calendar (ALSO in the header)
+*	`calendarMonthClass`		|	string		|	The calendar month class, set on all <td> inside the calendar
 *	`calendarLinkClass`			|	string		|	The calendar link class, set on the <a> object inside a day
 *	`calendarTextClass`			|	string		|	The calendar text class, set on the <span> object inside the <a> object of a day (calendarLinkClass)
 *	`calendarEventclass`		|	string		|	The calendar event class, set on the <td> wrapping the day with an event
@@ -74,11 +76,21 @@
 *	`onEventMouseOut`			|	function	|	Triggered when moving mouse out of a day with an event
 *	`onDayClick`				|	function	|	Triggered when clicking on a day
 *	`onEventClick`				|	function	|	Triggered when clicking on a day with an event
-*	`onPrev`					|	function	|	Triggered when clicking on the previous button / Added to the regular event @see changeMonth
-*	`onNext`					|	function	|	Triggered when clicking on the next button / Added to the regular event @see changeMonth
+*	`onPrev`					|	function	|	Triggered when clicking on the previous button while in day mode / Added to the regular event @see changeMonth
+*	`onNext`					|	function	|	Triggered when clicking on the next button while in day mode / Added to the regular event @see changeMonth
+*	`onNextYear`				|	function	|	Triggered when clicking on the next button while in month mode
+*	`onPrevYear`				|	function	|	Triggered when clicking on the prev button while in month mode
 *	`onChangeMonth`				|	function	|	Triggered after a new month has been loaded
+*	`onGotoMonthView`			|	function	|	Triggered after switching to the month view
+*	`onGotoDateView`			|	function	|	Triggered after switching to the date view
 *
 *	Return self (Calendar object)
+*
+* @todos
+* - Add class active onDayEventClick
+* - Add class active on everyday that event occurs (unless mutliple events? 1click first event, second click second event...)
+*
+*
 */
 
 (function($){
@@ -135,6 +147,7 @@
 	 		startDate : new Date(),
 	 		today : new Date(),
 	 		lang : 'fr',
+	 		mode: 'date',
 	 		useControls : true,
 	 		events : {},
 
@@ -149,7 +162,10 @@
 		 		calendarTableClass : 'calendar__table',
 		 		calendarTableHeaderClass : 'calendar__header',
 		 		calendarRowClass : 'calendar__row', // TR
+
 		 		calendarDayClass : 'calendar__day', // TD
+		 		calendarMonthClass : 'calendar__month', // TD
+		 		calendarMonthLabelClass : 'calendar__month_label', // TD
 		 		calendarLinkClass : 'calendar__link',
 		 		calendarTextClass : 'calendar__text',
 		 		calendarEventclass : 'calendar__day--event',
@@ -157,6 +173,8 @@
 		 		calendarEventStartclass : 'calendar__day--event--start',
 		 		calendarEventEndclass : 'calendar__day--event--end',
 		 		calendarEmptyDayClass : 'calendar__day--empty' // When no number
+		 	
+
 		 	},
 		 	callbacks: {
 		 		onChangeMonth : function(calendar) {
@@ -184,6 +202,18 @@
 
 		 		},
 		 		onNext : function(calendar) {
+
+		 		},
+		 		onPrevYear : function(calendar) {
+
+		 		},
+		 		onNextYear : function(calendar) {
+
+		 		},
+		 		onGotoMonthView : function(calendar) {
+
+		 		},
+		 		onGotoDateView : function(calendar) {
 
 		 		}
 		 	},
@@ -306,14 +336,17 @@ bCalendar.prototype.loadEvents = function()
 	this.events = [];
 	var opts = this.opts;
 
+	opts.events = this.escapeDatas(opts.events);
+
 	if (typeof opts.events == 'object') {
 		for (var i = 0; i < opts.events.length; i++) {
 
 			if (typeof opts.events[i]['date'] == "object") {
-				var first_date = new Date(opts.events[i]['date'].start);
-				var last_date = new Date(opts.events[i]['date'].end);
+				var first_date = new Date(this.unescapeDatas(opts.events[i]['date'].start));
+				var last_date = new Date(this.unescapeDatas(opts.events[i]['date'].end));
+
 			} else {
-				var first_date = new Date(opts.events[i]['date']);
+				var first_date = new Date(this.unescapeDatas(opts.events[i]['date']));
 				var last_date = first_date;
 			}
 
@@ -348,15 +381,244 @@ bCalendar.prototype.loadEvents = function()
 }
 
 
+/**
+* Every data passed to this function will be cleaned and encoded for web
+* Recursive
+* Prevents output errors
+* @param {Object} data
+* @return {Object} data
+*/ 
+bCalendar.prototype.escapeDatas = function(data) {
+	var that = this;
+
+	if (typeof data == 'undefined') {
+		return '';
+	}
+
+	if (typeof data == 'array') {
+		var i = 0;
+		var count = data.length;
+		for (; i < count; i++) {
+			data[i] = this.escapeDatas(data[i]);
+		}
+	}
+
+	if (typeof data == 'object') {
+		for (var i in data) {
+			data[i] = this.escapeDatas(data[i]);
+		}
+	}
+
+	if (typeof data == 'string') {
+		return escape( data );
+		// return unescape( encodeURIComponent( data ) )
+	}
+
+	// Default;
+	return data;
+
+}
+
+/**
+* Every data passed to this function will be cleaned and encoded for web
+* Recursive
+* Prevents output errors
+* @param {Object} data
+* @return {Object} data
+*/ 
+bCalendar.prototype.unescapeDatas = function(data) {
+	var that = this;
+
+	if (typeof data == 'undefined') {
+		return '';
+	}
+
+	if (typeof data == 'array') {
+		var i = 0;
+		var count = data.length;
+		for (; i < count; i++) {
+			data[i] = this.unescapeDatas(data[i]);
+		}
+	}
+
+	if (typeof data == 'object') {
+		for (var i in data) {
+			data[i] = this.unescapeDatas(data[i]);
+		}
+	}
+
+	if (typeof data == 'string') {
+		return unescape( data );
+		// return unescape( encodeURIComponent( data ) )
+	}
+
+	// Default;
+	return data;
+
+}
+
 
 /**
 * Generates the HTML considering all the events and options
 * Automatic generations from a date
 * Adds the html in 'this.html' / Use this.getHTML() to retrieve the informations
 *
+* Uses the mode options to display month OR date
+*
 * @return this (chainable)
 */
 bCalendar.prototype.generateHTML = function(){
+
+	var mode = this.opts.mode;
+
+	switch (mode) {
+		case 'date':
+			return this.generateDateView();
+			break;
+		case 'month':
+			return this.generateMonthView();
+		break;
+	}
+
+	// Default
+	return '';
+
+}
+
+
+bCalendar.prototype.generateHeaderView = function() {
+
+
+}
+
+/**
+* Month view
+* Generates the HTML considering all the events and options
+* Automatic generations from a date
+* Adds the html in 'this.html' / Use this.getHTML() to retrieve the informations
+*
+* @return this (chainable)
+*/
+bCalendar.prototype.generateMonthView = function() {
+
+	// Easier
+	var opts = this.opts;
+
+	// First day
+	var firstDay = new Date(this.year, this.month, 1);
+	var startingDay = firstDay.getDay();
+
+	this.current_date = firstDay;
+
+	var months = opts.translations.months[ opts.lang ];
+
+
+
+	// find number of days in month
+	var monthLength = this.daysInMonth[this.month];
+
+	// compensate for leap year
+	if (this.month == 1) { // February only!
+		if((this.year % 4 == 0 && this.year % 100 != 0) || this.year % 400 == 0){
+			monthLength = 29;
+		}
+	}
+
+	// do the header
+	var monthName = this.aMonths[this.lang][this.month];
+	var html = '';
+
+	// Start calendar output
+	html += '<div class="'+opts.classes.mainCalendarClass+'">';
+
+	// Calendar title (month + year)
+	html += '<h1 class="'+opts.classes.calendarTitleClass+'">'+ this.year+'</h1>';
+
+
+	// Calendar Controls
+	if (opts.useControls) {
+		html += '<div class="'+opts.classes.calendarControlsClass+'">';
+		html += '<a href="#" class="'+opts.classes.calendarControlsPrevClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.prevMonthLabel[ this.lang ]+'"><use xlink:href="#icon-arrowleft"></use></svg></a>';
+		html += '<a href="#" class="'+opts.classes.calendarControlsNextClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.nextMonthLabel[ this.lang ]+'"><use xlink:href="#icon-arrowright"></use></svg></a>';
+		html += '</div>';
+	}
+
+	html += '<table class="'+opts.classes.calendarTableClass+'" cellpadding=0" cellspacing="0" border="0">';
+
+
+	// this loop is for is weeks (rows)
+	for (var i = 0; i < 3; i++) {
+		// this loop is for weekdays (cells)
+		for (var j = 0; j <= 3; j++) {
+
+			// Month index, starting at 0;
+			var monthIndex = parseInt((i*4)+j);
+			var monthLabel = months[monthIndex];
+
+
+
+			// Arrays for output
+			var title = Array();
+			var url = Array();
+			var contents = Array();
+
+			// Month + 1 = Valid Date (getMonth() returns 0 to 11, valid date = 1 to 12)
+			var event = this.getEventsByMonth(''+this.year+'/'+(monthIndex+1)+'/1');
+
+			/*
+			*	@TODO -> MULTIPLE URL (in bubble perhaps)
+			*/
+			var url = Array();
+			var title = Array();
+
+			var k = 0;
+			var count = event.length;
+			for (; k < count; k++) {
+
+				if (typeof event[ k ]['link'] == 'string' ) {
+					url.push( event[ k ]['link'] );
+				}
+
+				if (typeof event[ k ]['content'] == 'string' ) {
+					contents.push( event[ k ]['content'] );
+				}
+
+				if (typeof event[ k ]['title'] == 'string' ) {
+					title.push( event[ k ]['title'] );
+				}
+			}
+
+
+			var has_event = !jQuery.isEmptyObject(event);
+			var extra_class = has_event ?' '+opts.classes.calendarEventclass:'';
+
+			html += '<td class="'+opts.classes.calendarMonthClass+''+ extra_class +'"  data-date="'+ this.year + '/' + (monthIndex+1) +'/1'+'" title="'+title.join(this.opts.eventSeparator)+'" data-description="'+contents.join(this.opts.eventSeparator)+'" data-href="'+url.join(this.opts.eventSeparator)+'">';
+			html += '<a class="'+opts.classes.calendarLinkClass+'" href="#"><span class="'+opts.classes.calendarTextClass+'">';
+
+
+			html += monthLabel;
+
+			html += '</span></a></td>';
+		}
+
+		html += '</tr><tr class="'+opts.classes.calendarRowClass+'">';
+	}
+	html += '</tr></table>';
+
+	this.html = html+'</div>';
+
+	return this;
+}
+
+/**
+* Date view
+* Generates the HTML considering all the events and options
+* Automatic generations from a date
+* Adds the html in 'this.html' / Use this.getHTML() to retrieve the informations
+*
+* @return this (chainable)
+*/
+bCalendar.prototype.generateDateView = function() {
 
 	// Easier
 	var opts = this.opts;
@@ -385,7 +647,7 @@ bCalendar.prototype.generateHTML = function(){
 	html += '<div class="'+opts.classes.mainCalendarClass+'">';
 
 	// Calendar title (month + year)
-	html += '<h1 class="'+opts.classes.calendarTitleClass+'">'+monthName + "&nbsp;" + this.year+'</h1>';
+	html += '<h1 class="'+opts.classes.calendarTitleClass+'"><a href="#" class="'+opts.classes.calendarMonthLabelClass+'">'+monthName + "&nbsp;" + this.year+'</a></h1>';
 
 
 	// Calendar Controls
@@ -404,7 +666,7 @@ bCalendar.prototype.generateHTML = function(){
 		html += '</td>';
 	}
 	html += '</tr><tr class="'+opts.classes.calendarRowClass+'">';
-	html += '</div>';
+	// html += '</div>';
 
 	// fill in the days
 	var day = 1;
@@ -474,7 +736,7 @@ bCalendar.prototype.generateHTML = function(){
 	}
 	html += '</tr></table>';
 
-	this.html = html;
+	this.html = html+'</div>';
 
 	return this;
 }
@@ -643,61 +905,124 @@ bCalendar.prototype.addListeners = function() {
 	var that = this;
 	var opts = this.opts;
 
+	// Click on a day with or without event
 	this.target.on('click', '.'+opts.classes.calendarDayClass, function(e)
 	{
 		e.preventDefault();
 
-		var datas = that._eventDatas($(this));
+		var datas = that.unescapeDatas( that._eventDatas($(this)) );
 		opts.callbacks.onDayClick(datas, that);
 
-	}).on('click', '.'+opts.classes.calendarEventclass+'.'+opts.classes.calendarDayClass, function(e)
+	})
+
+	// Click on a day with events
+	.on('click', '.'+opts.classes.calendarEventclass+'.'+opts.classes.calendarDayClass, function(e)
 	{
 		e.preventDefault();
 
-		var datas = that._eventDatas($(this));
+		var datas = that.unescapeDatas( that._eventDatas($(this)) );
 		opts.callbacks.onEventClick(datas, that);
 
-	}).on('mouseover', '.'+opts.classes.calendarDayClass, function(e)
+	})
+
+	// Mouseover any day
+	.on('mouseover', '.'+opts.classes.calendarDayClass, function(e)
 	{
 		e.preventDefault();
 
 		var datas = that._eventDatas($(this));
 		opts.callbacks.onDayMouseover(datas, that);
 
-	}).on('mouseover', '.'+opts.classes.calendarEventclass+'.'+opts.classes.calendarDayClass, function(e)
+	})
+
+	// Mouseover a day with event(s)
+	.on('mouseover', '.'+opts.classes.calendarEventclass+'.'+opts.classes.calendarDayClass, function(e)
 	{
 		e.preventDefault();
 
 		var datas = that._eventDatas($(this));
 		opts.callbacks.onEventMouseover(datas, that);
 
-	}).on('mouseout', '.'+opts.classes.calendarEventclass+'.'+opts.classes.calendarDayClass, function(e)
+	})
+
+	// Mouseout any day
+	.on('mouseout', '.'+opts.classes.calendarEventclass+'.'+opts.classes.calendarDayClass, function(e)
 	{
 		e.preventDefault();
 
 		var datas = that._eventDatas($(this));
 		opts.callbacks.onEventMouseout(datas, that);
 
-	}).on('mouseout', '.'+opts.classes.calendarDayClass, function(e)
+	})
+
+	// Mouseout a day with event(s)
+	.on('mouseout', '.'+opts.classes.calendarDayClass, function(e)
 	{
 		e.preventDefault();
 
 		var datas = that._eventDatas($(this));
 		opts.callbacks.onDayMouseout(datas, that);
 
-	}).on('click', '.'+opts.classes.calendarControlsPrevClass, function(e)
+	})
+
+	// Controls click
+	.on('click', '.'+opts.classes.calendarControlsPrevClass, function(e)
 	{
 		e.preventDefault();
 
-		opts.callbacks.onPrev(that);
-		that.changeMonth(-1);
 
-	}).on('click', '.'+opts.classes.calendarControlsNextClass, function(e)
+
+		if (opts.mode == 'date') {
+			opts.callbacks.onPrev(that);
+			that.changeMonth(-1);
+		}
+		if (opts.mode == 'month') {
+			that.year--;
+			that.refresh();
+			opts.callbacks.onPrevYear(that);
+		}
+
+	})
+
+	// Controls click
+	.on('click', '.'+opts.classes.calendarControlsNextClass, function(e)
 	{
 		e.preventDefault();
 
-		opts.callbacks.onNext(that);
-		that.changeMonth(1);
+
+		if (opts.mode == 'date') {
+			opts.callbacks.onNext(that);
+			that.changeMonth(1);
+		}
+		if (opts.mode == 'month') {
+			that.year++;
+			that.refresh();
+			opts.callbacks.onNextYear(that);
+		}
+	})
+
+	// Controls click
+	.on('click', '.'+opts.classes.calendarMonthLabelClass, function(e)
+	{
+		e.preventDefault();
+		that.opts.mode = 'month';
+		opts.callbacks.onGotoMonthView(that);
+		that.refresh();
+
+	})
+
+	// Controls click
+	.on('click', '.'+opts.classes.calendarMonthClass, function(e)
+	{
+		e.preventDefault();
+		var datas = that._eventDatas($(this));
+		that.opts.mode = 'date';
+
+		that.month = datas.date.getMonth();
+		that.year = datas.date.getFullYear();
+
+		opts.callbacks.onGotoDateView(that);
+		that.refresh();
 
 	});
 
@@ -763,6 +1088,10 @@ bCalendar._doc = {
 		type : 'Object',
 		description: 'JSON of all the events - Events can have pretty much any data, but requires at least a title and a date'
 	},
+	mode : {
+		type : 'String',
+		description: 'Specifys the desired display type: Either Month or Date (default: date)'
+	},
 	translations : {
 		type : 'Object',
 		description: 'Contains all translations',
@@ -824,6 +1153,10 @@ bCalendar._doc = {
 			calendarDayClass : {
 				type : 'String',
 				description : 'The calendar day class, set on all <td> inside the calendar (ALSO in the header)'
+			},
+			calendarMonthClass : {
+				type : 'String',
+				description : 'The calendar month class, set on all <td> inside'
 			},
 			calendarLinkClass : {
 				type : 'String',
@@ -892,11 +1225,27 @@ bCalendar._doc = {
 			},
 			onPrev : {
 				type : 'function',
-				description: 'Triggered when clicking on the previous button / Added to the regular event @see changeMonth'
+				description: 'Triggered when clicking on the previous button while in date mode / Added to the regular event @see changeMonth'
 			},
 			onNext : {
 				type : 'function',
-				description: 'Triggered when clicking on the next button / Added to the regular event @see changeMonth'
+				description: 'Triggered when clicking on the next button while in date mode / Added to the regular event @see changeMonth'
+			},
+			onPrevYear : {
+				type : 'function',
+				description: 'Triggered when clicking on the prev button while in month mode'
+			},
+			onNextYear : {
+				type : 'function',
+				description: 'Triggered when clicking on the next button while in month mode'
+			},
+			onGotoMonthView : {
+				type : 'function',
+				description: 'Triggered after switching to the month view'
+			},
+			onGotoDateView : {
+				type : 'function',
+				description: 'Triggered after switching to the date view'
 			}
 		}
 	}
