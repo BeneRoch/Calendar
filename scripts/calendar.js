@@ -173,7 +173,7 @@
 		 		calendarEventStartclass : 'calendar__day--event--start',
 		 		calendarEventEndclass : 'calendar__day--event--end',
 		 		calendarEmptyDayClass : 'calendar__day--empty' // When no number
-		 	
+
 
 		 	},
 		 	callbacks: {
@@ -280,7 +280,7 @@ var bCalendar = function(opts) {
 	this.lang = (typeof opts.lang == 'string')?opts.lang : 'fr';
 
 	// Today
-	this.current_date = opts.startDate;
+	this.current_date = typeof opts.startDate == 'object' ? opts.startDate : new Date(opts.startDate);
 
 	// Months labels
 	// From the options, we want this to be editable.
@@ -395,7 +395,7 @@ bCalendar.prototype.loadEvents = function()
 * Prevents output errors
 * @param {Object} data
 * @return {Object} data
-*/ 
+*/
 bCalendar.prototype.escapeDatas = function(data) {
 	var that = this;
 
@@ -433,7 +433,7 @@ bCalendar.prototype.escapeDatas = function(data) {
 * Prevents output errors
 * @param {Object} data
 * @return {Object} data
-*/ 
+*/
 bCalendar.prototype.unescapeDatas = function(data) {
 	var that = this;
 
@@ -949,7 +949,6 @@ bCalendar.prototype.addListeners = function() {
 	.on('click', '.'+opts.classes.calendarEventclass+'.'+opts.classes.calendarDayClass, function(e)
 	{
 		e.preventDefault();
-
 		var datas = that.unescapeDatas( that._eventDatas($(this)) );
 		opts.callbacks.onEventClick(datas, that);
 
