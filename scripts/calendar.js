@@ -43,6 +43,7 @@
 * `useControls					|	boolean		|	Auto output the controls for next and prev month if set to true (default: true)
 * `events`						|	object		|	JSON of all the events - Events can have pretty much any data, but requires at least a title and a date
 * `mode`						|	string		|	Specifys the desired display type: Either Month or Date (default: date)
+* `allow_month_view`			|	boolean		|	Define if you can switch between month view and date view (default: false)
 *
 * `translations`				|	object		|   Contains all translations
 * 	`months`					|	object		|	Labels for months, by lang, in an array starting from JANUARY to DECEMBER
@@ -148,6 +149,7 @@
 	 		today : new Date(),
 	 		lang : 'fr',
 	 		mode: 'date',
+	 		allow_month_view : false,
 	 		useControls : true,
 	 		events : {},
 
@@ -657,7 +659,21 @@ bCalendar.prototype.generateDateView = function() {
 	html += '<div class="'+opts.classes.mainCalendarClass+'">';
 
 	// Calendar title (month + year)
-	html += '<h1 class="'+opts.classes.calendarTitleClass+'"><a href="#" class="'+opts.classes.calendarMonthLabelClass+'">'+monthName + "&nbsp;" + this.year+'</a></h1>';
+	html += '<h1 class="'+opts.classes.calendarTitleClass+'">';
+
+	// Month view allowed -> make month title clickable
+	if (this.opts.allow_month_view) {
+		html += '<a href="#" class="'+opts.classes.calendarMonthLabelClass+'">';
+	}
+
+	html += monthName + "&nbsp;" + this.year;
+
+	// Month view allowed -> make month title clickable
+	if (this.opts.allow_month_view) {
+		html += '</a>';
+	}
+
+	html += '</h1>';
 
 
 	// Calendar Controls
