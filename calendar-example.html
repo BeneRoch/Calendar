@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie7"  xmlns:fb="http://ogp.me/ns/fb#" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 lt-ie8"  xmlns:fb="http://ogp.me/ns/fb#" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8"  xmlns:fb="http://ogp.me/ns/fb#" lang="en"> <![endif]-->
+<!--[if IE 9]>    <html class="no-js ie9"  xmlns:fb="http://ogp.me/ns/fb#" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--> <html class="gt-ie"  xmlns:fb="http://ogp.me/ns/fb#"> <!--<![endif]-->
+
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<script type="text/javascript" src="libs/jquery/jquery-1.11.1.min.js"></script>
+		<script type="text/javascript" src="src/calendar.js"></script>
+  <link rel="stylesheet" href="styles/styles.css">
+  </head>
+
+	<body>
+    <div class="calendar-widget" style="width: 500px; float: left; position: relative;">
+
+    </div>
+    <div class="calendar-widget--second" style="width: 500px; float: left; position: relative;">
+
+    </div>
+    <div class="event-infos">
+
+    </div>
+	</body>
+
+	<script>
+		/**
+		*	#Calendar example
+		*
+		*	@param {object} opts
+		*	- Event Title
+		*	- Event date (multi format : "2012/11/6", 1349094647000, etc. (whatever gets in new Date())
+		*	- Event Content
+		*	- Event Link
+		*
+		*	Return this (Calendar object)
+		*/
+		$(document).ready(function() {
+      $('.calendar-widget').calendar({
+        lang: 'fr',
+        mode: 'month',
+        events : [
+          {
+            date:"2015/01/16",
+            title: 'Test title',
+            content : 'Well, turns out on that date we uploaded the plugin'
+          },
+          {
+            date:"2015/01/16",
+            title: 'Doc title',
+            content : 'We also updated the doc accordingly'
+          },
+          {
+            date:{
+              start : "2015/01/17",
+              end : "2015/01/27"
+            },
+            title: 'Changes',
+            content : 'We might add s\0ome changes during theses days'
+          }
+        ]
+      });
+			$('.calendar-widget--second').calendar({
+				lang: 'fr',
+				events : [
+					{
+						date:"2015/01/16",
+						title: 'Test title',
+						content : 'Well, turns out on that date we uploaded the plugin'
+					},
+					{
+						date:{
+            start: "2015/01/16",
+            end: "february 1 2015"
+            },
+						title: 'Doc title',
+						content : 'We also u"<>pdated the doc accordingly'
+					},
+					{
+						date:{
+							start : "2015/01/17",
+							end : "2015/01/27"
+						},
+						title: 'Changes',
+						content : 'We might add s\0ome changes during theses days'
+					}
+				],
+        callbacks: {
+          onEventClick: function(ev,calendar) {
+            console.log(ev);
+            console.log(calendar);
+
+            var events = ev.events;
+            var count = events.length;
+            var i = 0;
+            var html = '';
+            for (; i<count; i++) {
+              html += '<h1>'+events[ i ]['title']+'</h1><p>'+events[ i ]['content']+'</p>';
+            }
+            $('.event-infos').html(html);
+          }
+        }
+			});
+		});
+
+	</script>
+
+	<footer>
+
+	</footer>
+
+</html>

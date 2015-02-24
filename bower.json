@@ -1,0 +1,21 @@
+{
+  "name": "bene-calendar",
+  "version": "0.1",
+  "description": "Fully customizable calendar with month picking utilities and event handling.",
+  "license": "MIT",
+  "main": "calendar-example.html",
+  "keywords": [
+    "bene",
+    "bene-calendar",
+    "event",
+    "calendar"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "jquery": ">=1.7"
+  }
+}

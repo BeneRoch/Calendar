@@ -966,6 +966,7 @@ bCalendar.prototype.addListeners = function() {
 	{
 		e.preventDefault();
 		var datas = that.unescapeDatas( that._eventDatas($(this)) );
+
 		opts.callbacks.onEventClick(datas, that);
 
 	})
