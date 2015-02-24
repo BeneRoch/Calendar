@@ -13,7 +13,9 @@
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components"
+    "bower_components",
+    "README.md",
+    "index.php"
   ],
   "dependencies": {
     "jquery": ">=1.7"
