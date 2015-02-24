@@ -70,23 +70,23 @@ $('#calendar-widget').calendar({
     translations: {
     	months: {
         	custom_lang : ['January', 'February', 'March', 'April','May', 'June', 'July', 'August', 'September','October', 'November', 'December']
-		 	},
-		 	days: {
-					custom_lang : ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-		 		},
-		 		nextMonthLabel : {
-		 			custom_lang : 'Next Month'
-		 		},
-		 		prevMonthLabel : {
-		 			custom_lang : 'Previous Month'
-		 		}
-		 		nextYearLabel : {
-		 			custom_lang : 'Next Year'
-		 		},
-		 		prevYearLabel : {
-		 			custom_lang : 'Previous Year'
-		 		}
-		 	}
+	 	},
+	 	days: {
+			custom_lang : ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+ 		},
+ 		nextMonthLabel : {
+ 			custom_lang : 'Next Month'
+ 		},
+ 		prevMonthLabel : {
+ 			custom_lang : 'Previous Month'
+ 		}
+ 		nextYearLabel : {
+ 			custom_lang : 'Next Year'
+ 		},
+ 		prevYearLabel : {
+ 			custom_lang : 'Previous Year'
+ 		}
+ 	}
 })
 ```
 #### Start in month view display
@@ -99,16 +99,16 @@ $('#calendar-widget').calendar({
 ```
 $('#calendar-widget').calendar({
     events : [
-	{
-		date:"2015/01/16",
-		title: 'Test title',
-		content : 'Well, turns out on that date we uploaded the plugin'
-	},
+		{
+			date:"2015/01/16",
+			title: 'Test title',
+			content : 'Well, turns out on that date we uploaded the plugin'
+		},
 		{
 		date:{
-            start: "2015/01/16",
-            end: "february 1 2015"
-        },
+	        start: "2015/01/16",
+	        end: "february 1 2015"
+	    },
 			title: 'Doc title',
 			content : 'We also u"<>pdated the doc accordingly'
 		},
@@ -138,7 +138,7 @@ Name							| Type			|	Description
  `startDate` 					|	Date Object	|	Current display date ( Default: current_date )
  `lang` 						|	string		|	Current display language
  `mode` 						|	string		|	Current display mode. Either month or date ( Default: date )
- `useControls					|	boolean		|	Auto output the controls for next and prev month if set to true (default: true)
+ `useControls`					|	boolean		|	Auto output the controls for next and prev month if set to true (default: true)
  `events`						|	object		|	JSON of all the events - Events can have pretty much any data, but requires at least a title and a date
 
 ### translations
