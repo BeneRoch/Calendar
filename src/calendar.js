@@ -550,8 +550,8 @@ bCalendar.prototype.generateMonthView = function() {
 	// Calendar Controls
 	if (opts.useControls) {
 		html += '<div class="'+opts.classes.calendarControlsClass+'">';
-		html += '<a href="#" class="'+opts.classes.calendarControlsPrevClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.prevYearLabel[ this.lang ]+'"><use xlink:href="#icon-arrowleft"></use></svg></a>';
-		html += '<a href="#" class="'+opts.classes.calendarControlsNextClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.nextYearLabel[ this.lang ]+'"><use xlink:href="#icon-arrowright"></use></svg></a>';
+		html += '<button class="'+opts.classes.calendarControlsPrevClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.prevYearLabel[ this.lang ]+'"><use xlink:href="#icon-arrowleft"></use></svg></button>';
+		html += '<button class="'+opts.classes.calendarControlsNextClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.nextYearLabel[ this.lang ]+'"><use xlink:href="#icon-arrowright"></use></svg></button>';
 		html += '</div>';
 	}
 
