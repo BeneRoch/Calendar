@@ -43,6 +43,7 @@
 * `useControls					|	boolean		|	Auto output the controls for next and prev month if set to true (default: true)
 * `events`						|	object		|	JSON of all the events - Events can have pretty much any data, but requires at least a title and a date
 * `mode`						|	string		|	Specifys the desired display type: Either Month or Date (default: date)
+* `allow_month_view`			|	boolean		|	Define if you can switch between month view and date view (default: false)
 *
 * `translations`				|	object		|   Contains all translations
 * 	`months`					|	object		|	Labels for months, by lang, in an array starting from JANUARY to DECEMBER
@@ -148,6 +149,7 @@
 	 		today : new Date(),
 	 		lang : 'fr',
 	 		mode: 'date',
+	 		allow_month_view : false,
 	 		useControls : true,
 	 		events : {},
 
@@ -173,7 +175,7 @@
 		 		calendarEventStartclass : 'calendar__day--event--start',
 		 		calendarEventEndclass : 'calendar__day--event--end',
 		 		calendarEmptyDayClass : 'calendar__day--empty' // When no number
-		 	
+
 
 		 	},
 		 	callbacks: {
@@ -280,7 +282,7 @@ var bCalendar = function(opts) {
 	this.lang = (typeof opts.lang == 'string')?opts.lang : 'fr';
 
 	// Today
-	this.current_date = opts.startDate;
+	this.current_date = typeof opts.startDate == 'object' ? opts.startDate : new Date(opts.startDate);
 
 	// Months labels
 	// From the options, we want this to be editable.
@@ -395,7 +397,7 @@ bCalendar.prototype.loadEvents = function()
 * Prevents output errors
 * @param {Object} data
 * @return {Object} data
-*/ 
+*/
 bCalendar.prototype.escapeDatas = function(data) {
 	var that = this;
 
@@ -433,7 +435,7 @@ bCalendar.prototype.escapeDatas = function(data) {
 * Prevents output errors
 * @param {Object} data
 * @return {Object} data
-*/ 
+*/
 bCalendar.prototype.unescapeDatas = function(data) {
 	var that = this;
 
@@ -548,8 +550,8 @@ bCalendar.prototype.generateMonthView = function() {
 	// Calendar Controls
 	if (opts.useControls) {
 		html += '<div class="'+opts.classes.calendarControlsClass+'">';
-		html += '<a href="#" class="'+opts.classes.calendarControlsPrevClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.prevYearLabel[ this.lang ]+'"><use xlink:href="#icon-arrowleft"></use></svg></a>';
-		html += '<a href="#" class="'+opts.classes.calendarControlsNextClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.nextYearLabel[ this.lang ]+'"><use xlink:href="#icon-arrowright"></use></svg></a>';
+		html += '<button class="'+opts.classes.calendarControlsPrevClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.prevYearLabel[ this.lang ]+'"><use xlink:href="#icon-arrowleft"></use></svg></button>';
+		html += '<button class="'+opts.classes.calendarControlsNextClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.nextYearLabel[ this.lang ]+'"><use xlink:href="#icon-arrowright"></use></svg></button>';
 		html += '</div>';
 	}
 
@@ -657,7 +659,21 @@ bCalendar.prototype.generateDateView = function() {
 	html += '<div class="'+opts.classes.mainCalendarClass+'">';
 
 	// Calendar title (month + year)
-	html += '<h1 class="'+opts.classes.calendarTitleClass+'"><a href="#" class="'+opts.classes.calendarMonthLabelClass+'">'+monthName + "&nbsp;" + this.year+'</a></h1>';
+	html += '<h1 class="'+opts.classes.calendarTitleClass+'">';
+
+	// Month view allowed -> make month title clickable
+	if (this.opts.allow_month_view) {
+		html += '<a href="#" class="'+opts.classes.calendarMonthLabelClass+'">';
+	}
+
+	html += monthName + "&nbsp;" + this.year;
+
+	// Month view allowed -> make month title clickable
+	if (this.opts.allow_month_view) {
+		html += '</a>';
+	}
+
+	html += '</h1>';
 
 
 	// Calendar Controls
@@ -949,8 +965,8 @@ bCalendar.prototype.addListeners = function() {
 	.on('click', '.'+opts.classes.calendarEventclass+'.'+opts.classes.calendarDayClass, function(e)
 	{
 		e.preventDefault();
-
 		var datas = that.unescapeDatas( that._eventDatas($(this)) );
+
 		opts.callbacks.onEventClick(datas, that);
 
 	})
