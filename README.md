@@ -138,7 +138,7 @@ Name							| Type			|	Description
  `startDate` 					|	Date Object	|	Current display date ( Default: current_date )
  `lang` 						|	string		|	Current display language
  `mode` 						|	string		|	Current display mode. Either month or date ( Default: date )
- `useControls					|	boolean		|	Auto output the controls for next and prev month if set to true (default: true)
+ `useControls`					|	boolean		|	Auto output the controls for next and prev month if set to true (default: true)
  `events`						|	object		|	JSON of all the events - Events can have pretty much any data, but requires at least a title and a date
 
 ### translations
