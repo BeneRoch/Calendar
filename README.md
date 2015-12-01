@@ -139,7 +139,7 @@ Name							| Type			|	Description
  `lang` 						|	string		|	Current display language
  `mode` 						|	string		|	Current display mode. Either month or date ( Default: date )
  `useControls`					|	boolean		|	Auto output the controls for next and prev month if set to true (default: true)
- `allow_month_view`				|	boolean		|	Define if you can switch between month view and date view (default: false)
+ `allow_month_view`				|	boolean		|	Define if you can switch between month view and date view (default: false, unless mode is set to `month`)
  `events`						|	object		|	JSON of all the events - Events can have pretty much any data, but requires at least a title and a date
 
 ### translations

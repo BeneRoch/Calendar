@@ -43,7 +43,7 @@
 * `useControls					|	boolean		|	Auto output the controls for next and prev month if set to true (default: true)
 * `events`						|	object		|	JSON of all the events - Events can have pretty much any data, but requires at least a title and a date
 * `mode`						|	string		|	Specifys the desired display type: Either Month or Date (default: date)
-* `allow_month_view`			|	boolean		|	Define if you can switch between month view and date view (default: false)
+* `allow_month_view`			|	boolean		|	Define if you can switch between month view and date view (default: false, unless mode is set to 'month')
 *
 * `translations`				|	object		|   Contains all translations
 * 	`months`					|	object		|	Labels for months, by lang, in an array starting from JANUARY to DECEMBER
@@ -251,6 +251,14 @@
 
 	 	// Merge options
 	 	var opts = $.extend(true, defaults, options);
+
+	 	if (opts.mode == 'month') {
+	 		// This should work that way
+	 		// If you have the month view, you
+	 		// want to be able to go back
+	 		// after selecting a month
+	 		opts.allow_month_view = true;
+	 	}
 
 	 	// Instanciation
 		var Charcoal_Calendar = new bCalendar(opts);
