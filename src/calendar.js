@@ -738,7 +738,7 @@ bCalendar.prototype.generateDateView = function() {
 			var has_event = !jQuery.isEmptyObject(event) && has_day;
 			var extra_class = has_event ?' '+opts.classes.calendarEventclass:'';
 
-			if (opts.today.getFullYear() == this.year && opts.today.getMonth() == this.month && opts.today.getDate() == day) {
+			if (opts.today.getFullYear() == this.year && opts.today.getMonth() == this.month && opts.today.getDate() == day && has_day) {
 				extra_class += ' '+opts.classes.currentDayClass;
 			}
 
