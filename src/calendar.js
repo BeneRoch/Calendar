@@ -558,8 +558,8 @@ bCalendar.prototype.generateMonthView = function() {
 	// Calendar Controls
 	if (opts.useControls) {
 		html += '<div class="'+opts.classes.calendarControlsClass+'">';
-		html += '<button class="'+opts.classes.calendarControlsPrevClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.prevYearLabel[ this.lang ]+'"><use xlink:href="#icon-arrowleft"></use></svg></button>';
-		html += '<button class="'+opts.classes.calendarControlsNextClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.nextYearLabel[ this.lang ]+'"><use xlink:href="#icon-arrowright"></use></svg></button>';
+		html += '<button class="'+opts.classes.calendarControlsPrevClass+'">'+opts.translations.prevYearLabel[ this.lang ]+'</button>';
+		html += '<button class="'+opts.classes.calendarControlsNextClass+'">'+opts.translations.nextYearLabel[ this.lang ]+'</button>';
 		html += '</div>';
 	}
 
@@ -687,8 +687,8 @@ bCalendar.prototype.generateDateView = function() {
 	// Calendar Controls
 	if (opts.useControls) {
 		html += '<div class="'+opts.classes.calendarControlsClass+'">';
-		html += '<a href="#" class="'+opts.classes.calendarControlsPrevClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.prevMonthLabel[ this.lang ]+'"><use xlink:href="#icon-arrowleft"></use></svg></a>';
-		html += '<a href="#" class="'+opts.classes.calendarControlsNextClass+'"><svg class="calendar__svg" role="img" title="'+opts.translations.nextMonthLabel[ this.lang ]+'"><use xlink:href="#icon-arrowright"></use></svg></a>';
+		html += '<a href="#" class="'+opts.classes.calendarControlsPrevClass+'">'+opts.translations.prevMonthLabel[ this.lang ]+'</a>';
+		html += '<a href="#" class="'+opts.classes.calendarControlsNextClass+'">'+opts.translations.nextMonthLabel[ this.lang ]+'</a>';
 		html += '</div>';
 	}
 
