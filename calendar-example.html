@@ -38,33 +38,33 @@
 		*	Return this (Calendar object)
 		*/
 		$(document).ready(function() {
-      $('.calendar-widget').calendar({
-        lang: 'fr',
-        mode: 'month',
-        events : [
-          {
-            date:"2015/01/16",
-            title: 'Test title',
-            content : 'Well, turns out on that date we uploaded the plugin'
-          },
-          {
-            date:"2015/01/16",
-            title: 'Doc title',
-            content : 'We also updated the doc accordingly'
-          },
-          {
-            date:{
-              start : "2015/01/17",
-              end : "2015/01/27"
-            },
-            title: 'Changes',
-            content : 'We might add s\0ome changes during theses days'
-          }
-        ]
-      });
+			$('.calendar-widget').calendar({
+				lang: 'fr',
+				mode: 'month',
+				events : [
+					{
+						date:"2015/01/16",
+						title: 'Test title',
+						content : 'Well, turns out on that date we uploaded the plugin'
+					},
+					{
+						date:"2015/01/16",
+						title: 'Doc title',
+						content : 'We also updated the doc accordingly'
+					},
+					{
+						date:{
+						start : "2015/01/17",
+						end : "2015/01/27"
+					},
+						title: 'Changes',
+						content : 'We might add s\0ome changes during theses days'
+					}
+				]
+			});
+
 			$('.calendar-widget--second').calendar({
 				lang: 'fr',
-        allow_month_view : true,
 				events : [
 					{
 						date:"2015/01/16",
@@ -73,36 +73,33 @@
 					},
 					{
 						date:{
-            start: "2015/01/16",
-            end: "february 1 2015"
-            },
+						start: "2015/01/16",
+						end: "february 1 2015"
+					},
 						title: 'Doc title',
 						content : 'We also u"<>pdated the doc accordingly'
 					},
 					{
 						date:{
-							start : "2015/01/17",
-							end : "2015/01/27"
-						},
+						start : "2015/01/17",
+						end : "2015/01/27"
+					},
 						title: 'Changes',
 						content : 'We might add s\0ome changes during theses days'
 					}
 				],
-        callbacks: {
-          onEventClick: function(ev,calendar) {
-            console.log(ev);
-            console.log(calendar);
-
-            var events = ev.events;
-            var count = events.length;
-            var i = 0;
-            var html = '';
-            for (; i<count; i++) {
-              html += '<h1>'+events[ i ]['title']+'</h1><p>'+events[ i ]['content']+'</p>';
-            }
-            $('.event-infos').html(html);
-          }
-        }
+				callbacks: {
+					onEventClick: function(ev,calendar) {
+						var events = ev.events;
+						var count = events.length;
+						var i = 0;
+						var html = '';
+						for (; i<count; i++) {
+							html += '<h1>'+events[ i ]['title']+'</h1><p>'+events[ i ]['content']+'</p>';
+						}
+						$('.event-infos').html(html);
+					}
+				}
 			});
 		});
 
@@ -111,5 +108,4 @@
 	<footer>
 
 	</footer>
-
 </html>
