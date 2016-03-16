@@ -687,8 +687,8 @@ bCalendar.prototype.generateDateView = function() {
 	// Calendar Controls
 	if (opts.useControls) {
 		html += '<div class="'+opts.classes.calendarControlsClass+'">';
-		html += '<a href="#" class="'+opts.classes.calendarControlsPrevClass+'">'+opts.translations.prevMonthLabel[ this.lang ]+'</a>';
-		html += '<a href="#" class="'+opts.classes.calendarControlsNextClass+'">'+opts.translations.nextMonthLabel[ this.lang ]+'</a>';
+		html += '<button class="'+opts.classes.calendarControlsPrevClass+'">'+opts.translations.prevMonthLabel[ this.lang ]+'</button>';
+		html += '<button class="'+opts.classes.calendarControlsNextClass+'">'+opts.translations.nextMonthLabel[ this.lang ]+'</button>';
 		html += '</div>';
 	}
 

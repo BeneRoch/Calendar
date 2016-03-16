@@ -1,6 +1,7 @@
 # Calendar
 
 ## Description
+You can find [demo here](beneroch.com/calendar)
 Home made calendar that covers events and datepicking. Every event on a day in the calendar
 returns a date object of the current target.  Note that even the header triggers these events,
 with a `null` object as a date.
