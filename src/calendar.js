@@ -428,6 +428,8 @@ bCalendar.prototype.escapeDatas = function(data) {
     }
 
     if (typeof data == 'string') {
+        // Do not escape twice.
+        data = this.unescapeDatas(data);
         return escape( data );
         // return unescape( encodeURIComponent( data ) )
     }
@@ -451,14 +453,6 @@ bCalendar.prototype.unescapeDatas = function(data) {
         return '';
     }
 
-    if (typeof data == 'array') {
-        var i = 0;
-        var count = data.length;
-        for (; i < count; i++) {
-            data[i] = this.unescapeDatas(data[i]);
-        }
-    }
-
     if (typeof data == 'object') {
         for (var i in data) {
             data[i] = this.unescapeDatas(data[i]);
@@ -466,7 +460,9 @@ bCalendar.prototype.unescapeDatas = function(data) {
     }
 
     if (typeof data == 'string') {
-        return unescape( data );
+        var out = unescape(data);
+        // console.log(out);
+        return out;
         // return unescape( encodeURIComponent( data ) )
     }
 
