@@ -14,7 +14,7 @@ body, html {
   float: left;
   padding-left: 10px;
   padding-right: 10px;
-border-left: 1px dotted black;
+  border-left: 1px dotted black;
 }
   .half:first-child, .quarter:first-child, .whole:first-child, .three-fourth:first-child {
     padding-left: 0; }
@@ -64,7 +64,7 @@ border-left: 1px dotted black;
 
 }
 
-.calendar {
+.c-calendar {
     position: relative;
     /*max-width:400px;*/
 
@@ -73,49 +73,51 @@ border-left: 1px dotted black;
     text-align:center;
 }
 
-.calendar a {
+.c-calendar a {
   text-decoration: none;
   color: #666;
 }
 
-.calendar__table {
+.c-calendar_table {
     width: 100%;
 }
 
-.calendar__title {
+.c-calendar_title {
     margin: 0;
     padding-bottom: 20px;
+    font-size: 20px;
+    font-weight: bold;
 }
 
 
-.calendar__header {
+.c-calendar_header {
   margin-bottom: 10px;
   display: inline-block;
   width: 100%;
 }
-.calendar__header td {
+.c-calendar_header th {
   border: 1px solid #eee;
-  width: calc( ( 100% / 7 ) - 2px );
+  width: calc( ( 100% / 7 ) - 4px );
 }
 
-.calendar__header > .calendar__day {
+.c-calendar_header > .c-calendar_day {
     padding-bottom: 0px;
 }
 
-.calendar__row {
+.c-calendar_row {
     display: inline-block;
     width: 100%;
 }
 
-.calendar__day {
+.c-calendar_day {
     position:relative;
     border: 1px solid transparent;
-    width: calc( ( 100% / 7 ) - 2px );
+    width: calc( ( 100% / 7 ) - 4px );
     padding-bottom: 14%;
     display: inline-block;
 }
 
-.calendar__day--event .calendar__text:after {
+.-event .c-calendar_text:after {
     content: "";
     display: block;
     width: 4px;
@@ -128,7 +130,7 @@ border-left: 1px dotted black;
     background-color: #000000;
 }
 
-.calendar__link {
+.c-calendar_link {
     text-decoration: none;
     position: absolute;
     display: block;
@@ -136,37 +138,37 @@ border-left: 1px dotted black;
     height: 100%;
 }
 
-.calendar__link:hover .calendar__text {
+.c-calendar_link:hover .c-calendar_text {
     color: black;
 }
 
-.calendar__link:hover .calendar__text:after {
+.c-calendar_link:hover .c-calendar_text:after {
     background-color: black;
 }
 
 
-.calendar__prev {
+.c-calendar_prev {
     position: absolute;
     left: 0;
     top: 0px;
 }
 
-.calendar__prev:before {
+.c-calendar_prev:before {
   content: "← ";
 }
 
-.calendar__next:after {
+.c-calendar_next:after {
  content: " →";
 }
 
 
-.calendar__next {
+.c-calendar_next {
     position: absolute;
     right: 0px;
     top: 0px;
 }
 
-.calendar__next, .calendar__prev {
+.c-calendar_next, .c-calendar_prev {
   /*  width: 17px;
     height: 17px;*/
     background: none;
@@ -175,19 +177,19 @@ border-left: 1px dotted black;
     cursor: pointer;
 }
 
-.calendar__header {
+.c-calendar_header {
 
   }
-  .calendar__header > .calendar__day {
+  .c-calendar_header > .c-calendar_day {
     padding-bottom: 0px;
     font-weight: 500; }
 
 
-.calendar__month {
+.c-calendar_month {
   font-family: "brandon-grotesque", sans-serif;
   font-weight: 500;
   font-size: 24px;
-  width: 25%;
+  width: 24%;
   position: relative;
   padding-bottom: 14%;
   display: inline-block;
@@ -198,7 +200,7 @@ border-left: 1px dotted black;
 
 
   @media (min-width: 1680px) {
-    .calendar__day {
+    .c-calendar_day {
       padding-bottom: 10%; }
   }
 
