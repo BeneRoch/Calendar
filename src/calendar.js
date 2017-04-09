@@ -13,7 +13,7 @@
 * ###Simple date
 * ```
 * [ {
-*   date : '2015/1/10',
+*   date : '2017/4/10',
 *   content : '',
 *   title : ''
 * } ]
@@ -23,8 +23,8 @@
 * ```
 * [ {
 *   date : {
-*       start : '2015/1/10',
-*       end : '2015/1/11'
+*       start : '2017/4/10',
+*       end : '2017/4/11'
 *   },
 *   content : '',
 *   title : ''
@@ -40,12 +40,15 @@
 * `setEvents`                   | Dynamically change the calendar event list
 *
 * ##Options
-* `startDate`                   |   Date Object |   Current display date ( Default: current_date )
+* `startDate`                   |   Date Object |   Current display date ( Default: selectedDate )
 * `lang`                        |   string      |   Current display language
 * `useControls                  |   boolean     |   Auto output the controls for next and prev month if set to true (default: true)
 * `events`                      |   object      |   JSON of all the events - Events can have pretty much any data, but requires at least a title and a date
 * `mode`                        |   string      |   Specifys the desired display type: Either Month or Date (default: date)
-* `allow_month_view`            |   boolean     |   Define if you can switch between month view and date view (default: false, unless mode is set to 'month')
+* `allowMonthView`              |   boolean     |   Define if you can see the month view (default: false, unless mode is set to 'month')
+* `allowDateView`               |   boolean     |   Define if you can see the date view (default: false, unless mode is set to 'date')
+* `displayEventsNumber`         |   boolean     |   Define if you can to display the number of events on the calendar (default: true)
+* `displayAdjacentMonthDates`   |   boolean     |   Define if you want to display the adjacent month dates or empty boxes (default: true)
 *
 * `translations`                |   object      |   Contains all translations
 *   `months`                    |   object      |   Labels for months, by lang, in an array starting from JANUARY to DECEMBER
@@ -67,10 +70,11 @@
 *   `calendarLinkClass`         |   string      |   The calendar link class, set on the <a> object inside a day
 *   `calendarTextClass`         |   string      |   The calendar text class, set on the <span> object inside the <a> object of a day (calendarLinkClass)
 *   `calendarEventclass`        |   string      |   The calendar event class, set on the <td> wrapping the day with an event
-*   `calendarEventStartclass`   |   string      |   The calendar event class, set on the <td> wrapping the day an event starts
-*   `calendarEventEndclass`     |   string      |   The calendar event class, set on the <td> wrapping the day an event ends
+*   `calendarNumEventsClass`    |   string      |   The calendar num event class, set on the <span> that contains the number of events
 *   `calendarEmptyDayClass`     |   string      |   The calendar empty day class, set on the <td> wrapping a day with no date
-*   `currentDayClass`           |   string      |   The calendar current day class, set on the <td> wrapping today's date
+*   `calendarCurrentDayClass`   |   string      |   The calendar current day class, set on the <td> wrapping today's date
+*   `calendarSelectedDayClass`  |   string      |   The calendar selected day class, set on the <td> wrapping the selected date
+*   `calendarSelectedMonthClass`|   string      |   The calendar selected month class, set on the <td> wrapping the selected date's month
 *
 * `callbacks`                   |   object      |   Contains all possible callbacks
 *   `onDayMouseOver`            |   function    |   Triggered when moving mouse over a day
@@ -86,13 +90,6 @@
 *   `onChangeMonth`             |   function    |   Triggered after a new month has been loaded
 *   `onGotoMonthView`           |   function    |   Triggered after switching to the month view
 *   `onGotoDateView`            |   function    |   Triggered after switching to the date view
-*
-*   Return self (Calendar object)
-*
-* @todos
-* - Add class active onDayEventClick
-* - Add class active on everyday that event occurs (unless mutliple events? 1click first event, second click second event...)
-*
 *
 */
 
@@ -162,11 +159,16 @@
         */
         var defaults = {
             startDate : new Date(),
-            today : new Date(),
             lang : 'fr',
             mode: 'date',
-            allow_month_view : false,
+            allowMonthView : false,
+            allowDateView : true,
             useControls : true,
+            displayEventsNumber:true,
+
+            // Show the dates in the `-empty` boxes.
+            displayAdjacentMonthDates: true,
+
             events : {},
 
             // Classes ( || html markup )
@@ -189,13 +191,23 @@
                 calendarLinkClass: 'c-calendar_link',
                 calendarTextClass: 'c-calendar_text',
                 calendarEventclass: '-event',
-                currentDayClass: '-today',
-                calendarEventStartclass: '-start',
-                calendarEventEndclass: '-end',
-                calendarEmptyDayClass: '-empty'
+                calendarNumEventsClass: '-num',
+                calendarCurrentDayClass: '-today',
+                calendarSelectedDayClass: '-selected',
+                calendarSelectedMonthClass: '-selected',
+                calendarEmptyDayClass: '-empty' // Not in the same month
             },
             callbacks: {
                 onChangeMonth : function(calendar) {
+
+                },
+                onChangeYear : function(calendar) {
+
+                },
+                onDatePick : function(date, calendar) {
+
+                },
+                onMonthSelect : function(date, calendar) {
 
                 },
                 onDayClick : function(date, calendar) {
@@ -269,26 +281,25 @@
         var opts = $.extend(true, defaults, options);
 
         if (opts.mode == 'month') {
-            // This should work that way
-            // If you have the month view, you
-            // want to be able to go back
-            // after selecting a month
-            opts.allow_month_view = true;
+            // Disabling month view in month mode shouldn't be possible.
+            opts.allowMonthView = true;
+        }
+
+        if (opts.mode == 'date') {
+            // Disabling date view in date mode shouldn't be possible.
+            opts.allowDateView = true;
         }
 
         // Instanciation
-        var Charcoal_Calendar = new bCalendar(opts);
+        var calendar = new bCalendar(opts);
 
-        Charcoal_Calendar.target = $(this);
-        Charcoal_Calendar.load()
-        // Generate HTML
-        // Charcoal_Calendar.generateHTML();
+        // Affect current target object
+        calendar.target = $(this);
 
-        // Append HTML
-        // Charcoal_Calendar.target.html(Charcoal_Calendar.getHTML());
+        // Load.
+        calendar.load()
 
-        // Charcoal_Calendar.addListeners();
-        return Charcoal_Calendar;
+        return calendar;
     }
 })(jQuery);
 
@@ -299,14 +310,14 @@
 * @see doc above
 */
 var bCalendar = function(opts) {
+    // All available string for strtr
+    this._strings;
+
     // Options
     this.opts = opts;
 
     // Lang
-    this.lang = (typeof opts.lang == 'string')?opts.lang : 'fr';
-
-    // Today
-    this.current_date = typeof opts.startDate == 'object' ? opts.startDate : new Date(opts.startDate);
+    this.lang = (typeof opts.lang == 'string') ? opts.lang : 'fr';
 
     // Months labels
     // From the options, we want this to be editable.
@@ -326,14 +337,41 @@ var bCalendar = function(opts) {
     // Events
     this.events = {};
 
+    // Today || custom date.
+    this.setSelectedDate(opts.startDate);
     this.loadEvents();
 
-    this.month =  (isNaN(opts.month) || opts.month == null) ? this.current_date.getMonth() : opts.month;
-    this.year = (isNaN(opts.year) || opts.year == null) ? this.current_date.getFullYear() : opts.year;
+    this.month  = this.selectedDate.getMonth();
+    this.year   = this.selectedDate.getFullYear();
 
     this.html = '';
 
     return this;
+}
+
+/**
+ * Strings used in the calendar.
+ * @return {array} All strings already localised when need be.
+ */
+bCalendar.prototype.strings = function()
+{
+    if (this._strings) {
+        return this._strings;
+    }
+
+    // Easier
+    var opts = this.opts;
+
+    var strings = opts.classes;
+    strings = $.fn.extend(strings, {
+        prevYearLabel : opts.translations.prevYearLabel[ this.lang ],
+        nextYearLabel : opts.translations.nextYearLabel[ this.lang ],
+        nextMonthLabel : opts.translations.nextMonthLabel[ this.lang ],
+        prevMonthLabel : opts.translations.prevMonthLabel[ this.lang ],
+    });
+
+    this._strings = strings;
+    return this._strings;
 }
 
 /**
@@ -447,6 +485,9 @@ bCalendar.prototype.setEvents = function(events)
 bCalendar.prototype.loadEvents = function()
 {
     this.events = [];
+
+    this.numEvents = [];
+
     var opts = this.opts;
 
     // opts.events = this.escapeDatas(opts.events);
@@ -464,13 +505,31 @@ bCalendar.prototype.loadEvents = function()
             var first_date = new Date(this.unescapeDatas(opts.events[i]['date']));
             var last_date = first_date;
         }
+        var eDate = first_date;  
+        var year = eDate.getFullYear();
+        var month = eDate.getMonth();
 
-        this.eDate = first_date;
+        if (typeof this.numEvents[year] == 'undefined') {
+            this.numEvents[year] = {
+                num : 0,
+                months : {}
+            };
+        }
 
-        while (this.eDate <= last_date) {
-            var year = this.eDate.getFullYear();
-            var month = this.eDate.getMonth();
-            var day = this.eDate.getDate();
+        if (typeof this.numEvents[year].months[month] == 'undefined') {
+            this.numEvents[year].months[month] = {
+                num: 0,
+                days : {}
+            };
+        }
+
+        this.numEvents[year].num++;
+        this.numEvents[year].months[month].num++;
+
+        while (eDate <= last_date) {
+            year = eDate.getFullYear();
+            month = eDate.getMonth();
+            var day = eDate.getDate();
 
             // BUILDING events array
             if (typeof this.events[year] == 'undefined') {
@@ -485,9 +544,30 @@ bCalendar.prototype.loadEvents = function()
                 this.events[year][month][day] = [];
             }
 
+            if (typeof this.numEvents[year] == 'undefined') {
+                this.numEvents[year] = {
+                    num : 0,
+                    months : {}
+                };
+                this.numEvents[year].num++;
+            }
+
+            if (typeof this.numEvents[year].months[month] == 'undefined') {
+                this.numEvents[year].months[month] = {
+                    num: 0,
+                    days : {}
+                };
+                this.numEvents[year].months[month].num++;
+            }
+
+            if (typeof this.numEvents[year].months[month].days[day] == 'undefined') {
+                this.numEvents[year].months[month].days[day] = 0;
+            }
+            this.numEvents[year].months[month].days[day]++;
+
             this.events[year][month][day].push(opts.events[i]);
 
-            this.eDate = new Date(year, month, (day+1));
+            eDate = new Date(year, month, (day+1));
         }
     }
 
@@ -526,7 +606,6 @@ bCalendar.prototype.escapeDatas = function(data) {
         // Do not escape twice.
         data = this.unescapeDatas(data);
         return escape( data );
-        // return unescape( encodeURIComponent( data ) )
     }
 
     // Default;
@@ -580,11 +659,11 @@ bCalendar.prototype.generateHTML = function(){
     this.opts.events = this.escapeDatas(this.opts.events);
 
     switch (mode) {
-        case 'date':
-            return this.generateDateView();
-            break;
         case 'month':
             return this.generateMonthView();
+        break;
+        case 'date':
+            return this.generateDateView();
         break;
     }
 
@@ -599,111 +678,102 @@ bCalendar.prototype.generateHTML = function(){
 * Automatic generations from a date
 * Adds the html in 'this.html' / Use this.getHTML() to retrieve the informations
 *
-* @return this (chainable)
+* @return {thisArg} (chainable)
 */
 bCalendar.prototype.generateMonthView = function() {
+    // Strings to be used with strtr for the html template
+    var strings = this.strings();
+    strings.year = this.year; // Adds to strings
 
-    // Easier
+    // Shorthand
     var opts = this.opts;
 
     // First day
     var firstDay = new Date(this.year, this.month, 1);
     var startingDay = firstDay.getDay();
 
-    this.current_date = firstDay;
-
+    // Months by lang.
     var months = opts.translations.months[ opts.lang ];
 
-
-
     // find number of days in month
-    var monthLength = this.daysInMonth[this.month];
-
-    // compensate for leap year
-    if (this.month == 1) { // February only!
-        if((this.year % 4 == 0 && this.year % 100 != 0) || this.year % 400 == 0){
-            monthLength = 29;
-        }
-    }
+    var monthLength = firstDay.getMonthLastDay();
 
     // do the header
     var monthName = this.aMonths[this.lang][this.month];
     var html = '';
 
+
     // Start calendar output
-    html += '<div class="'+opts.classes.mainCalendarClass+'">';
+    html += '<div class="{mainCalendarClass}">';
 
     // Calendar title (month + year)
-    html += '<p class="'+opts.classes.calendarTitleClass+'">'+ this.year+'</p>';
+    var num = this.getNumEvents(firstDay, 'year');
+    if (opts.displayEventsNumber && num != 0) {
+        html += '<p class="{calendarTitleClass}">{year}<span class="{calendarNumEventsClass}">'+num+'</span></p>';
+    } else {
+        html += '<p class="{calendarTitleClass}">{year}</p>';
+    }
 
     // Calendar Controls
     if (opts.useControls) {
-        html += '<div class="'+opts.classes.calendarControlsClass+'">';
-        html += '<button class="'+opts.classes.calendarControlsPrevClass+'" type="button">'+opts.translations.prevYearLabel[ this.lang ]+'</button>';
-        html += '<button class="'+opts.classes.calendarControlsNextClass+'" type="button">'+opts.translations.nextYearLabel[ this.lang ]+'</button>';
-        html += '</div>';
+        html += '<div class="{calendarControlsClass}">'+
+                    '<button class="{calendarControlsPrevClass}" type="button">{prevYearLabel}</button>'+
+                    '<button class="{calendarControlsNextClass}" type="button">{nextYearLabel}</button>'+
+                '</div>';
     }
 
-    html += '<table class="'+opts.classes.calendarTableClass+'">';
+    html += '<table class="{calendarTableClass}">';
 
     // this loop is for is weeks (rows)
     for (var i = 0; i < 3; i++) {
+
         // this loop is for weekdays (cells)
         for (var j = 0; j <= 3; j++) {
 
             // Month index, starting at 0;
             var monthIndex = parseInt((i*4)+j);
             var monthLabel = months[monthIndex];
-
-            // Arrays for output
-            var title = Array();
-            var url = Array();
-            var contents = Array();
+            var monthDate  = new Date(this.year+'/'+(monthIndex+1)+'/1');
 
             // Month + 1 = Valid Date (getMonth() returns 0 to 11, valid date = 1 to 12)
-            var event = this.getEventsByMonth(''+this.year+'/'+(monthIndex+1)+'/1');
+            var events      = this.getEventsByMonth(this.year+'/'+(monthIndex+1)+'/1');
+            var content     = this.getEventsContent(events);
 
-            /*
-            *   @TODO -> MULTIPLE URL (in bubble perhaps)
-            */
-            var url = Array();
-            var title = Array();
+            var title       = content.title.join(this.opts.eventSeparator);
+            var url         = content.url.join(this.opts.eventSeparator);
+            var contents    = content.contents.join(this.opts.eventSeparator);
+            var hasEvents   = !jQuery.isEmptyObject(events);
+            var extraClass  = hasEvents ?' {calendarEventclass}' : '';
 
-            var k = 0;
-            var count = event.length;
-            for (; k < count; k++) {
-
-                if (typeof event[ k ]['link'] == 'string' ) {
-                    url.push( event[ k ]['link'] );
-                }
-
-                if (typeof event[ k ]['content'] == 'string' ) {
-                    contents.push( event[ k ]['content'] );
-                }
-
-                if (typeof event[ k ]['title'] == 'string' ) {
-                    title.push( event[ k ]['title'] );
-                }
+            if (this.selectedDate.getMonth() == monthIndex && this.selectedDate.getFullYear() == this.year) {
+                extraClass += ' {calendarSelectedMonthClass}';
             }
 
+            var num = this.getNumEvents(monthDate, 'month');
+            if (opts.displayEventsNumber) {
+                extraClass += ' data-num="'+num+'"';
+            }
 
-            var has_event = !jQuery.isEmptyObject(event);
-            var extra_class = has_event ?' '+opts.classes.calendarEventclass:'';
-
-            html += '<td class="'+opts.classes.calendarMonthClass+''+ extra_class +
-                '"  data-date="'+ this.year + '/' + (monthIndex+1) +'/1'+
-                '" title="'+title.join(this.opts.eventSeparator)+'" data-description="'+contents.join(this.opts.eventSeparator)+
-                '" data-href="'+url.join(this.opts.eventSeparator)+'">';
-            html += '<a class="'+opts.classes.calendarLinkClass+'" href="#"><span class="'+opts.classes.calendarTextClass+'">';
+            html += '<td class="{calendarMonthClass}'+ extraClass +'"'+
+                ' data-date="'+ this.year + '/' + (monthIndex+1) +'/1'+'"'+
+                ' title="'+title+'"'+
+                ' data-description="'+contents+'"'+
+                ' data-href="'+url+'">'+
+                '   <a class="{calendarLinkClass}" href="#"><span class="{calendarTextClass}">';
             html += monthLabel;
-            html += '</span></a></td>';
+            html += '</span>';
+
+            if (opts.displayEventsNumber && num != 0) {
+                html += '<span class="{calendarNumEventsClass}">'+num+'</span>';
+            }
+            html += '</a></td>';
         }
 
-        html += '</tr><tr class="'+opts.classes.calendarRowClass+'">';
+        html += '</tr><tr class="{calendarRowClass}">';
     }
     html += '</tr></table></div>';
 
-    this.html = html;
+    this.html = html.strtr(strings);
 
     return this;
 }
@@ -717,13 +787,15 @@ bCalendar.prototype.generateMonthView = function() {
 * @return this (chainable)
 */
 bCalendar.prototype.generateDateView = function() {
+    var strings = this.strings();
 
-    // Easier
+    // Shorthand
     var opts = this.opts;
 
     // First day
     var firstDay = new Date(this.year, this.month, 1);
     var startingDay = firstDay.getDay();
+    var monthLength = firstDay.getMonthLastDay();
 
     // Last month...
     var previousMonth = this.month-1;
@@ -731,72 +803,39 @@ bCalendar.prototype.generateDateView = function() {
         previousMonth = 11;
     }
     var previousMonthDate = new Date(this.year, previousMonth, 1);
-
-    this.current_date = firstDay;
-
-    // find number of days in month
-    var monthLength = this.daysInMonth[this.month];
-    var previousMonthLength = this.daysInMonth[previousMonth];
-
-    // compensate for leap year
-    if (this.month == 1) { // February only!
-        if((this.year % 4 == 0 && this.year % 100 != 0) || this.year % 400 == 0){
-            monthLength = 29;
-        }
-    }
-
-    // compensate for leap year
-    if (previousMonth == 1) { // February only!
-        if((this.year % 4 == 0 && this.year % 100 != 0) || this.year % 400 == 0){
-            previousMonthLength = 29;
-        }
-    }
-
+    var previousMonthLength = previousMonthDate.getMonthLastDay();
     var previousMonthDifferencial = previousMonthLength - (startingDay-1);
 
-    // do the header
+    // Header
     var monthName = this.aMonths[this.lang][this.month];
-    var html = '';
+    strings.monthName = monthName;
+    strings.year = this.year;
 
-    // Start calendar output
-    html += '<div class="'+opts.classes.mainCalendarClass+'">';
-
-    // Calendar title (month + year)
-    html += '<p class="'+opts.classes.calendarTitleClass+'">';
-
-    // Month view allowed -> make month title clickable
-    if (this.opts.allow_month_view) {
-        html += '<a href="#" class="'+opts.classes.calendarMonthLabelClass+'">';
-    }
-
-    html += '<span class="'+opts.classes.calendarTitleMonthClass+'">' + monthName +
-        '</span> <span class="'+opts.classes.calendarTitleYearClass+'">' + this.year + '</span>';
-
-    // Month view allowed -> make month title clickable
-    if (this.opts.allow_month_view) {
-        html += '</a>';
-    }
-
-    html += '</p>';
-
+    var html = '<div class="{mainCalendarClass}">'+
+            '<p class="{calendarTitleClass}">'+
+                '<a href="#" class="{calendarMonthLabelClass}">'+
+                    '<span class="{calendarTitleMonthClass}">{monthName} </span>'+
+                    '<span class="{calendarTitleYearClass}">{year}</span>'+
+                '</a>'+
+            '</p>';
 
     // Calendar Controls
     if (opts.useControls) {
-        html += '<div class="'+opts.classes.calendarControlsClass+'">';
-        html += '<button class="'+opts.classes.calendarControlsPrevClass+'" type="button">'+opts.translations.prevMonthLabel[ this.lang ]+'</button>';
-        html += '<button class="'+opts.classes.calendarControlsNextClass+'" type="button">'+opts.translations.nextMonthLabel[ this.lang ]+'</button>';
-        html += '</div>';
+        html += '<div class="{calendarControlsClass}">'+
+                    '<button class="{calendarControlsPrevClass}" type="button">{prevMonthLabel}</button>'+
+                    '<button class="{calendarControlsNextClass}" type="button">{nextMonthLabel}</button>'+
+                '</div>';
     }
 
-    html += '<table class="'+opts.classes.calendarTableClass+'"><thead class="'+opts.classes.calendarTableHeaderClass+'">';
-    html += '<tr class="'+opts.classes.calendarTableHeaderClass+'">';
+    html += '<table class="{calendarTableClass}"><thead class="{calendarTableHeaderClass}">'+
+                '<tr class="{calendarTableHeaderClass}">';
     for(var i = 0; i <= 6; i++ ){
-        html += '<th class="'+opts.classes.calendarDayClass+'"><span class="'+opts.classes.calendarTextClass+'">';
+        html += '<th class="{calendarDayClass}"><span class="{calendarTextClass}">';
         html += this.aDays[this.lang][i];
         html += '</span></th>';
     }
-    html += '</tr></thead>';
-    html += '</tr><tbody><tr class="'+opts.classes.calendarRowClass+'">';
+    html += '</tr></thead>'+
+            '</tr><tbody><tr class="{calendarRowClass}">';
 
     // fill in the days
     var day = 1;
@@ -806,81 +845,87 @@ bCalendar.prototype.generateDateView = function() {
     for (var i = 0; i < 9; i++) {
         // this loop is for weekdays (cells)
         for (var j = 0; j <= 6; j++) {
+            // Month + 1 = Valid Date (getMonth() returns 0 to 11, valid date = 1 to 12)
+            var currentDayDate = new Date(this.year, this.month, day);
+
+            // Check if we display the day number
+            var hasDay = day <= monthLength && (i > 0 || j >= startingDay);
+
+            // Adds as data on the object
+            var dataDate = ( hasDay ? this.year + '/' + (this.month+1) +'/'+day : 0 );
+
+            var events = {};
+            if (i === 0 && j < startingDay) {
+                // Since we need to add 1 to the current month here we don't have to remove 1.
+                var previousMonth = (this.month == 0) ? 12 : this.month;
+                events = this.getEventsByDate(''+this.year+'/'+previousMonth+'/'+previousMonthDifferencial);
+                dataDate = this.year+'/'+previousMonth+'/'+previousMonthDifferencial;
+            }
+            else if (!hasDay && i > 0) {
+                var nextMonth = (this.month >= 11) ? 1 : (this.month+2); // +1, current value, +1 next month
+                events = this.getEventsByDate(''+this.year+'/'+nextMonth+'/'+nextMonthDays);
+                dataDate = this.year+'/'+nextMonth+'/'+nextMonthDays;
+            }
+            else {
+                events = this.getEventsByDate(currentDayDate);
+            }
+
+            var hasEvents = !jQuery.isEmptyObject(events);
+            var extraClass = hasEvents ?' '+opts.classes.calendarEventclass:'';
 
             // Arrays for output
             var title = Array();
             var url = Array();
             var contents = Array();
 
-            // Month + 1 = Valid Date (getMonth() returns 0 to 11, valid date = 1 to 12)
-            var event = this.getEventsByDate(''+this.year+'/'+(this.month+1)+'/'+day);
-
-
-            /*
-            *   @TODO -> MULTIPLE URL (in bubble perhaps)
-            */
-            var url = Array();
-            var title = Array();
-
             var k = 0;
-            var count = event.length;
+            var count = events.length;
             for (; k < count; k++) {
-
-                if (typeof event[ k ]['link'] == 'string' ) {
-                    url.push( event[ k ]['link'] );
+                if (typeof events[ k ]['link'] == 'string') {
+                    url.push( events[ k ]['link'] );
                 }
-
-                if (typeof event[ k ]['content'] == 'string' ) {
-                    contents.push( event[ k ]['content'] );
+                if (typeof events[ k ]['content'] == 'string') {
+                    contents.push( events[ k ]['content'] );
                 }
-
-                if (typeof event[ k ]['title'] == 'string' ) {
-                    title.push( event[ k ]['title'] );
+                if (typeof events[ k ]['title'] == 'string') {
+                    title.push( events[ k ]['title'] );
                 }
             }
 
-            var has_day = day <= monthLength && (i > 0 || j >= startingDay);
-
-            // Month + 1 = Valid Date (getMonth() returns 0 to 11, valid date = 1 to 12)
-            var event = this.getEventsByDate(''+this.year+'/'+(this.month+1)+'/'+day);
-            var dataDate = ( has_day ? this.year + '/' + (this.month+1) +'/'+day : 0 );
-
-            if (i === 0 && j < startingDay) {
-                // Since we need to add 1 to the current month
-                // Here we don't have to remove 1.
-                var previousMonth = (this.month == 0) ? 12 : this.month;
-                event = this.getEventsByDate(''+this.year+'/'+previousMonth+'/'+previousMonthDifferencial);
-                dataDate = this.year+'/'+previousMonth+'/'+previousMonthDifferencial;
+            // Sets "today" on the startDate (defined in options, defaults to today)
+            if (opts.startDate.getFullYear() == this.year && 
+                opts.startDate.getMonth() == this.month && 
+                opts.startDate.getDate() == day && 
+                hasDay) {
+                extraClass += ' {calendarCurrentDayClass}';
             }
 
-            if (!has_day && i > 0) {
-                var nextMonth = (this.month >= 11) ? 1 : (this.month+2);
-                event = this.getEventsByDate(''+this.year+'/'+nextMonth+'/'+nextMonthDays);
-                dataDate = this.year+'/'+nextMonth+'/'+nextMonthDays;
+            // Sets "selected" class on the currently selected date.
+            // 
+            if (this.selectedDate.getFullYear() == this.year && 
+                this.selectedDate.getMonth() == this.month && 
+                this.selectedDate.getDate() == day && 
+                hasDay) {
+                extraClass += ' {calendarSelectedDayClass}';
             }
 
-            var has_event = !jQuery.isEmptyObject(event);
-            var extra_class = has_event ?' '+opts.classes.calendarEventclass:'';
-
-            if (opts.today.getFullYear() == this.year && opts.today.getMonth() == this.month && opts.today.getDate() == day && has_day) {
-                extra_class += ' '+opts.classes.currentDayClass;
-            }
-
-            html += '<td class="'+opts.classes.calendarDayClass+''+ ( has_day ? '':' '+opts.classes.calendarEmptyDayClass+'' ) + extra_class +
+            html += '<td class="{calendarDayClass}'+ ( hasDay ? '':' {calendarEmptyDayClass}' ) + extraClass +
                 '" data-date="'+ dataDate +
                 '" title="'+title.join(this.opts.eventSeparator)+
                 '" data-description="'+contents.join(this.opts.eventSeparator)+
                 '" data-href="'+url.join(this.opts.eventSeparator)+'">';
 
-            html += '<a class="'+opts.classes.calendarLinkClass+'" href="#">';
-            html += '<span class="'+opts.classes.calendarTextClass+'">';
+            html += '<a class="{calendarLinkClass}" href="#">';
+            html += '<span class="{calendarTextClass}">';
 
-            if (has_day) {
+            if (hasDay) {
                 html += day;
                 day++;
             }
             else if (i === 0) {
-                html += previousMonthDifferencial;
+                if (opts.displayAdjacentMonthDates) {
+                    html += previousMonthDifferencial;
+                }
                 previousMonthDifferencial++;
             }
             else {
@@ -889,19 +934,24 @@ bCalendar.prototype.generateDateView = function() {
             }
 
             html += '</span>';
+
+            num = this.getNumEvents(currentDayDate);
+            if (opts.displayEventsNumber && num != 0 && hasDay) {
+                html += '<span class="{calendarNumEventsClass}">'+num+'</span>'
+            }
+
             html += '</a>';
             html += '</td>';
         }
         // stop making rows if we've run out of days
         if (day > monthLength) {
             break;
-        } else {
-            html += '</tr><tr class="'+opts.classes.calendarRowClass+'">';
         }
+        html += '</tr><tr class="{calendarRowClass}">';
     }
-    html += '</tr></tbody></table>';
+    html += '</tr></tbody></table></div>';
 
-    this.html = html+'</div>';
+    this.html = html.strtr(strings);
 
     return this;
 }
@@ -915,13 +965,14 @@ bCalendar.prototype.generateDateView = function() {
 */
 bCalendar.prototype.getEventsByDate = function(date)
 {
-    // Object Date
-    var d = new Date(date);
+    if (!(date instanceof Date)) {
+        date = new Date(date);
+    }
 
     // Stock new value
-    var month =     d.getMonth();
-    var year =  d.getFullYear();
-    var day =   d.getDate();
+    var month   = date.getMonth();
+    var year    = date.getFullYear();
+    var day     = date.getDate();
 
     if (typeof this.events[year] == 'undefined') {
         return {};
@@ -957,8 +1008,8 @@ bCalendar.prototype.getEventsByMonth = function(date)
     var d = new Date(date);
 
     // Stock new value
-    var month =     d.getMonth();
-    var year =  d.getFullYear();
+    var month   = d.getMonth();
+    var year    = d.getFullYear();
 
     if (typeof this.events[year] == 'undefined') {
         return {};
@@ -993,11 +1044,8 @@ bCalendar.prototype.changeMonth = function(dir)
         this.month += direction;
     }
 
-
     // Refresh View
-    this.refresh(function(calendar) {
-        calendar.opts.callbacks.onChangeMonth(calendar);
-    });
+    this.refresh(this.opts.callbacks.onChangeMonth);
 
     return this;
 }
@@ -1017,7 +1065,7 @@ bCalendar.prototype.changeYear = function(dir)
     this.year = this.year + dir;
 
     // Refresh View
-    this.refresh();
+    this.refresh(this.opts.callbacks.onChangeYear);
 
     return this;
 }
@@ -1075,6 +1123,22 @@ bCalendar.prototype._eventDatas = function(elem)
 }
 
 /**
+ * Sets the selected date.
+ * Could be a date object or a string
+ * @param {mixed} date Selected date.
+ * @return {thisArg} Chainable.
+ */
+bCalendar.prototype.setSelectedDate = function(date)
+{
+    if (!(date instanceof Date)) {
+        date = new Date(date);
+    }
+    this.selectedDate = date;
+    this.opts.callbacks.onDatePick(date, this);
+    return this;
+}
+
+/**
 * Adds all listeners on the calendar with default and custom callbacks
 * `onDayClick`
 * `onEventClick`
@@ -1093,17 +1157,20 @@ bCalendar.prototype.addListeners = function() {
     var opts = this.opts;
 
     // Click on a day with or without event
-    this.target.on('click', '.'+opts.classes.calendarDayClass, function(e)
+    this.target.on('click.bCalendar', '.'+opts.classes.calendarDayClass, function(e)
     {
         e.preventDefault();
 
         var datas = that.unescapeDatas( that._eventDatas($(this)) );
+        that.setSelectedDate(datas.date);
+        that.refresh();
+
         opts.callbacks.onDayClick(datas, that);
 
     })
 
     // Click on a day with events
-    .on('click', '.'+opts.classes.calendarEventclass+'.'+opts.classes.calendarDayClass, function(e)
+    .on('click.bCalendar', '.'+opts.classes.calendarEventclass+'.'+opts.classes.calendarDayClass, function(e)
     {
         e.preventDefault();
         var datas = that.unescapeDatas( that._eventDatas($(this)) );
@@ -1113,7 +1180,7 @@ bCalendar.prototype.addListeners = function() {
     })
 
     // Mouseover any day
-    .on('mouseover', '.'+opts.classes.calendarDayClass, function(e)
+    .on('mouseover.bCalendar', '.'+opts.classes.calendarDayClass, function(e)
     {
         e.preventDefault();
 
@@ -1123,7 +1190,7 @@ bCalendar.prototype.addListeners = function() {
     })
 
     // Mouseover a day with event(s)
-    .on('mouseover', '.'+opts.classes.calendarEventclass+'.'+opts.classes.calendarDayClass, function(e)
+    .on('mouseover.bCalendar', '.'+opts.classes.calendarEventclass+'.'+opts.classes.calendarDayClass, function(e)
     {
         e.preventDefault();
 
@@ -1133,7 +1200,7 @@ bCalendar.prototype.addListeners = function() {
     })
 
     // Mouseout any day
-    .on('mouseout', '.'+opts.classes.calendarEventclass+'.'+opts.classes.calendarDayClass, function(e)
+    .on('mouseout.bCalendar', '.'+opts.classes.calendarEventclass+'.'+opts.classes.calendarDayClass, function(e)
     {
         e.preventDefault();
 
@@ -1143,7 +1210,7 @@ bCalendar.prototype.addListeners = function() {
     })
 
     // Mouseout a day with event(s)
-    .on('mouseout', '.'+opts.classes.calendarDayClass, function(e)
+    .on('mouseout.bCalendar', '.'+opts.classes.calendarDayClass, function(e)
     {
         e.preventDefault();
 
@@ -1153,11 +1220,9 @@ bCalendar.prototype.addListeners = function() {
     })
 
     // Controls click
-    .on('click', '.'+opts.classes.calendarControlsPrevClass, function(e)
+    .on('click.bCalendar', '.'+opts.classes.calendarControlsPrevClass, function(e)
     {
         e.preventDefault();
-
-
 
         if (opts.mode == 'date') {
             opts.callbacks.onPrev(that);
@@ -1171,10 +1236,9 @@ bCalendar.prototype.addListeners = function() {
     })
 
     // Controls click
-    .on('click', '.'+opts.classes.calendarControlsNextClass, function(e)
+    .on('click.bCalendar', '.'+opts.classes.calendarControlsNextClass, function(e)
     {
         e.preventDefault();
-
 
         if (opts.mode == 'date') {
             opts.callbacks.onNext(that);
@@ -1187,26 +1251,32 @@ bCalendar.prototype.addListeners = function() {
     })
 
     // Controls click
-    .on('click', '.'+opts.classes.calendarMonthLabelClass, function(e)
+    .on('click.bCalendar', '.'+opts.classes.calendarMonthLabelClass, function(e)
     {
         e.preventDefault();
-        that.opts.mode = 'month';
-        opts.callbacks.onGotoMonthView(that);
+
+        if (that.opts.allowMonthView) {
+            that.opts.mode = 'month';
+            opts.callbacks.onGotoMonthView(that);
+        }
         that.refresh();
 
     })
 
     // Controls click
-    .on('click', '.'+opts.classes.calendarMonthClass, function(e)
+    .on('click.bCalendar', '.'+opts.classes.calendarMonthClass, function(e)
     {
         e.preventDefault();
-        var datas = that._eventDatas($(this));
-        that.opts.mode = 'date';
-
-        that.month = datas.date.getMonth();
-        that.year = datas.date.getFullYear();
-
-        opts.callbacks.onGotoDateView(that);
+        var date = new Date($(this).data('date'));
+        if (that.opts.allowDateView) {
+            that.opts.mode = 'date';
+            that.month = date.getMonth();
+            that.year = date.getFullYear();
+            opts.callbacks.onGotoDateView(date, that);
+        } else {
+            opts.callbacks.onMonthSelect(date, that);
+            that.setSelectedDate(date);
+        }
         that.refresh();
 
     });
@@ -1239,11 +1309,126 @@ bCalendar.prototype.getHTML = function() {
   return this.html;
 }
 
-
+/**
+ * Destroy the calendar and event listeners
+ * @return {[type]} [description]
+ */
 bCalendar.prototype.destroy = function() {
-    this.target.off('click');
-    this.target.off('mouseover');
-    this.target.off('mouseout');
+    this.target.off('.bCalendar');
     this.target.html('');
     this.target.data('calendar', false);
 };
+
+/**
+ * Retrieves number of event per either year, month or day
+ * @param  {mixed}  date Date object or string
+ * @param  {string} mode Either year, month or day (defaults to day).
+ * @return {integer}     Number of events
+ */
+bCalendar.prototype.getNumEvents = function(date, mode)
+{
+    if (!(date instanceof Date)) {
+        date = new Date(date);
+    }
+
+    var year = date.getFullYear();
+    if (typeof this.numEvents[year] == 'undefined') {
+        return 0;
+    }
+
+    if (mode == 'year') {
+        return this.numEvents[year].num;
+    }
+
+    var month = date.getMonth();
+    if (typeof this.numEvents[year].months[month] == 'undefined') {
+        return 0;
+    }
+
+    if (mode == 'month') {
+        return this.numEvents[year].months[month].num;
+    }
+
+    var day = date.getDate();
+    if (typeof this.numEvents[year].months[month].days[day] == 'undefined') {
+        return 0;
+    }
+
+    return this.numEvents[year].months[month].days[day];
+}
+
+/**
+ * Retrieves events content (list of events);
+ * @param  {object} events Events list.
+ * @return {object}        Contents
+ */
+bCalendar.prototype.getEventsContent = function(events)
+{      
+    // Arrays for output
+    var title = [];
+    var url = [];
+    var contents = [];
+
+    var k = 0;
+    var count = events.length;
+    for (; k < count; k++) {
+        if (typeof events[ k ]['link'] == 'string' ) {
+            url.push( events[ k ]['link'] );
+        }
+        if (typeof events[ k ]['content'] == 'string' ) {
+            contents.push( events[ k ]['content'] );
+        }
+        if (typeof events[ k ]['title'] == 'string' ) {
+            title.push( events[ k ]['title'] );
+        }
+    }
+
+    return {
+        title     : title,
+        contents  : contents,
+        url       : url
+    };
+}
+
+/**
+ * Utils.
+ */
+
+/**
+ * Replaces all instance of {property} by the args[property].
+ * @param  {object} args Replacements.
+ * @return {string}      Modified string.
+ */
+if (typeof String.prototype.strtr === 'undefined') {
+    String.prototype.strtr = function (args) {
+        "use strict";
+        var str = this.toString(), key, re;
+        for (key in args) {
+            if (args.hasOwnProperty(key)) {
+                re = new RegExp('{'+key+'}', "g");
+                str = str.replace(re, args[key]);
+            }
+        }
+        return str;
+    }
+}
+
+/**
+ * Returns the last day in a given Date object.
+ * @param  {mixed}      date DateTime or string of date.
+ * @return {integer}         Number of days in the month / last day of the month.
+ */
+if (typeof Date.prototype.getMonthLastDay === 'undefined') {
+    Date.prototype.getMonthLastDay = function(date)
+    {
+        if (!date) {
+            return new Date(this.getYear(), this.getMonth()+1, 0).getDate();
+        }
+
+        if (!(date instanceof Date)) {
+            date = new Date(date);
+        }
+
+        return new Date(date.getYear(), date.getMonth()+1, 0).getDate();
+    }
+}
