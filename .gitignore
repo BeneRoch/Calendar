@@ -1,0 +1,9 @@
+# Logs
+logs
+*.log
+error_log
+
+# Package Managers
+# -----------------
+vendor/
+node_modules/

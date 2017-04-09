@@ -8,9 +8,9 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <script type="text/javascript" src="libs/jquery/jquery-1.11.1.min.js"></script>
-    <script type="text/javascript" src="src/calendar.js"></script>
-  <link rel="stylesheet" href="styles/styles.css">
+    <script type="text/javascript" src="dist/js/vendors.js"></script>
+    <script type="text/javascript" src="dist/js/app.js"></script>
+  <link rel="stylesheet" href="dist/styles/main.css">
   </head>
 
   <body>

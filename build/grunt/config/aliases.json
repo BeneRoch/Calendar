@@ -1,0 +1,33 @@
+{
+    "default": [
+        "build"
+    ],
+
+    "sync": [
+        "browserSync",
+        "browserify:dev",
+        "watch"
+    ],
+
+    "build": [
+        "sass",
+        "postcss",
+        "cssmin",
+        "browserify:prod",
+        "concat:prod",
+        "uglify"
+    ],
+
+    "w": [
+        "browserify:dev",
+        "watch"
+    ],
+
+    "c": [
+        "csscomb"
+    ],
+
+    "j": [
+        "eslint"
+    ]
+}
