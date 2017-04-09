@@ -174,8 +174,8 @@ Name                            | Type          |   Description
  `calendarTextClass`            |   string      |   The calendar text class, set on the <span> object inside the <a> object of a day (calendarLinkClass)
  `calendarEventclass`           |   string      |   The calendar event class, set on the TD wrapping the day with an event
  `calendarEmptyDayClass`        |   string      |   The calendar empty day class, set on the TD wrapping a day with no date
- `calendarCurrentDayClass`      |   string      |   The calendar current day class, set on the <td> wrapping today's date
- `calendarSelectedDayClass`     |   string      |   The calendar selected day class, set on the <td> wrapping the selected date
+ `calendarCurrentDayClass`      |   string      |   The calendar current day class, set on the td wrapping today's date
+ `calendarSelectedDayClass`     |   string      |   The calendar selected day class, set on the td wrapping the selected date
  `calendarSelectedMonthClass`   |   string      |   The calendar empty day class, set on the TD wrapping a day with no date
 
 ### callbacks
