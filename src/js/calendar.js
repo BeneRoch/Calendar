@@ -1,100 +1,100 @@
 /*
-* #Calendar
-*
-* ##Description
-* Home made calendar that covers events and datepicking. Every event on a day in the calendar
-* returns a date object of the current target.  Note that even the header triggers these events,
-* with a `null` object as a date.
-*
-* For date picking, you can add a `onDayClick` event and then manage the date object. ( @see `onDayClick` option below )
-* Events are passed as a JSON object and each requires a title and a date. The date parameter is `mixed`, which means it
-* can be a string, a timestamp or an object.  It'll be an object if the event has a beginning and an end.
-*
-* ###Simple date
-* ```
-* [ {
-*   date : '2017/4/10',
-*   content : '',
-*   title : ''
-* } ]
-* ```
-*
-* ###Complex date
-* ```
-* [ {
-*   date : {
-*       start : '2017/4/10',
-*       end : '2017/4/11'
-*   },
-*   content : '',
-*   title : ''
-* } ]
-* ```
-*
-* ##API
-* `destroy`                     | Destroys the calendar by removing all HTML and LISTENERS
-* `next`                        | Goes to next month
-* `prev`                        | Goes to previous month
-* `addEvent`                    | Dynamically add an event to the calendar
-* `addEvents`                   | Dynamically add multiple events to the calendar
-* `setEvents`                   | Dynamically change the calendar event list
-*
-* ##Options
-* `startDate`                   |   Date Object |   Current display date ( Default: selectedDate )
-* `lang`                        |   string      |   Current display language
-* `useControls                  |   boolean     |   Auto output the controls for next and prev month if set to true (default: true)
-* `events`                      |   object      |   JSON of all the events - Events can have pretty much any data, but requires at least a title and a date
-* `mode`                        |   string      |   Specifys the desired display type: Either Month or Date (default: date)
-* `allowMonthView`              |   boolean     |   Define if you can see the month view (default: false, unless mode is set to 'month')
-* `allowDateView`               |   boolean     |   Define if you can see the date view (default: false, unless mode is set to 'date')
-* `displayEventsNumber`         |   boolean     |   Define if you can to display the number of events on the calendar (default: true)
-* `displayAdjacentMonthDates`   |   boolean     |   Define if you want to display the adjacent month dates or empty boxes (default: true)
-* `eventsNumberTemplate`        |   string      |   Templates used to display the number of events on a day / year / month
-*
-* `translations`                |   object      |   Contains all translations
-*   `months`                    |   object      |   Labels for months, by lang, in an array starting from JANUARY to DECEMBER
-*   `days`                      |   object      |   Labels for days, by lang, in an array starting from SUNDAY to SATURDAY
-*   `nextMonthLabel`            |   object      |   Labels for skip month's title, by lang, in an array (view default)
-*   `prevMonthLabel`            |   object      |   Labels for skip month's title, by lang, in an array (view default)
-*
-* `classes`                     |   object      |   Contains all classes used by the plugin (generateHTML)
-*   `mainCalendarClass`         |   string      |   The main calendar class, set on the <div> object that wraps it all
-*   `calendarTitleClass`        |   string      |   The calendar title class, set on the <h1> object
-*   `calendarControlsClass`     |   string      |   The calendar controls wrapper class, set on the <div> object that wraps controls
-*   `calendarControlsPrevClass` |   string      |   The calendar previous month button class, set on the <a> object
-*   `calendarControlsNextClass` |   string      |   The calendar next month button class, set on the <a> object
-*   `calendarTableClass`        |   string      |   The calendar table class, set on the <table> object
-*   `calendarTableHeaderClass`  |   string      |   The calendar table header class, set on the <tr> object that contains the day's labels
-*   `calendarRowClass`          |   string      |   The calendar row class, set on all the other <tr> object as opposed to 'calendarTableHeaderClass'
-*   `calendarDayClass`          |   string      |   The calendar day class, set on all <td> inside the calendar (ALSO in the header)
-*   `calendarMonthClass`        |   string      |   The calendar month class, set on all <td> inside the calendar
-*   `calendarLinkClass`         |   string      |   The calendar link class, set on the <a> object inside a day
-*   `calendarTextClass`         |   string      |   The calendar text class, set on the <span> object inside the <a> object of a day (calendarLinkClass)
-*   `calendarEventclass`        |   string      |   The calendar event class, set on the <td> wrapping the day with an event
-*   `calendarEmptyDayClass`     |   string      |   The calendar empty day class, set on the <td> wrapping a day with no date
-*   `calendarCurrentDayClass`   |   string      |   The calendar current day class, set on the <td> wrapping today's date
-*   `calendarSelectedDayClass`  |   string      |   The calendar selected day class, set on the <td> wrapping the selected date
-*   `calendarSelectedMonthClass`|   string      |   The calendar selected month class, set on the <td> wrapping the selected date's month
-*
-* `callbacks`                   |   object      |   Contains all possible callbacks
-*   `onDayMouseOver`            |   function    |   Triggered when moving mouse over a day
-*   `onEventMouseOver`          |   function    |   Triggered when moving mouse over a day with an event
-*   `onDayMouseOut`             |   function    |   Triggered when moving mouse out of a day
-*   `onEventMouseOut`           |   function    |   Triggered when moving mouse out of a day with an event
-*   `onDayClick`                |   function    |   Triggered when clicking on a day
-*   `onEventClick`              |   function    |   Triggered when clicking on a day with an event
-*   `onPrev`                    |   function    |   Triggered when clicking on the previous button while in day mode / Added to the regular event @see changeMonth
-*   `onNext`                    |   function    |   Triggered when clicking on the next button while in day mode / Added to the regular event @see changeMonth
-*   `onNextYear`                |   function    |   Triggered when clicking on the next button while in month mode
-*   `onPrevYear`                |   function    |   Triggered when clicking on the prev button while in month mode
-*   `onChangeMonth`             |   function    |   Triggered after a new month has been loaded
-*   `onGotoMonthView`           |   function    |   Triggered after switching to the month view
-*   `onGotoDateView`            |   function    |   Triggered after switching to the date view
-*
-*/
+ * #Calendar
+ *
+ * ##Description
+ * Home made calendar that covers events and datepicking. Every event on a day in the calendar
+ * returns a date object of the current target.  Note that even the header triggers these events,
+ * with a `null` object as a date.
+ *
+ * For date picking, you can add a `onDayClick` event and then manage the date object. ( @see `onDayClick` option below )
+ * Events are passed as a JSON object and each requires a title and a date. The date parameter is `mixed`, which means it
+ * can be a string, a timestamp or an object.  It'll be an object if the event has a beginning and an end.
+ *
+ * ###Simple date
+ * ```
+ * [ {
+ *   date : '2017/4/10',
+ *   content : '',
+ *   title : ''
+ * } ]
+ * ```
+ *
+ * ###Complex date
+ * ```
+ * [ {
+ *   date : {
+ *       start : '2017/4/10',
+ *       end : '2017/4/11'
+ *   },
+ *   content : '',
+ *   title : ''
+ * } ]
+ * ```
+ *
+ * ##API
+ * `destroy`                     | Destroys the calendar by removing all HTML and LISTENERS
+ * `next`                        | Goes to next month
+ * `prev`                        | Goes to previous month
+ * `addEvent`                    | Dynamically add an event to the calendar
+ * `addEvents`                   | Dynamically add multiple events to the calendar
+ * `setEvents`                   | Dynamically change the calendar event list
+ *
+ * ##Options
+ * `startDate`                   |   Date Object |   Current display date ( Default: selectedDate )
+ * `lang`                        |   string      |   Current display language
+ * `useControls                  |   boolean     |   Auto output the controls for next and prev month if set to true (default: true)
+ * `events`                      |   object      |   JSON of all the events - Events can have pretty much any data, but requires at least a title and a date
+ * `mode`                        |   string      |   Specifys the desired display type: Either Month or Date (default: date)
+ * `allowMonthView`              |   boolean     |   Define if you can see the month view (default: false, unless mode is set to 'month')
+ * `allowDateView`               |   boolean     |   Define if you can see the date view (default: false, unless mode is set to 'date')
+ * `displayEventsNumber`         |   boolean     |   Define if you can to display the number of events on the calendar (default: true)
+ * `displayAdjacentMonthDates`   |   boolean     |   Define if you want to display the adjacent month dates or empty boxes (default: true)
+ * `eventsNumberTemplate`        |   string      |   Templates used to display the number of events on a day / year / month
+ *
+ * `translations`                |   object      |   Contains all translations
+ *   `months`                    |   object      |   Labels for months, by lang, in an array starting from JANUARY to DECEMBER
+ *   `days`                      |   object      |   Labels for days, by lang, in an array starting from SUNDAY to SATURDAY
+ *   `nextMonthLabel`            |   object      |   Labels for skip month's title, by lang, in an array (view default)
+ *   `prevMonthLabel`            |   object      |   Labels for skip month's title, by lang, in an array (view default)
+ *
+ * `classes`                     |   object      |   Contains all classes used by the plugin (generateHTML)
+ *   `mainCalendarClass`         |   string      |   The main calendar class, set on the <div> object that wraps it all
+ *   `calendarTitleClass`        |   string      |   The calendar title class, set on the <h1> object
+ *   `calendarControlsClass`     |   string      |   The calendar controls wrapper class, set on the <div> object that wraps controls
+ *   `calendarControlsPrevClass` |   string      |   The calendar previous month button class, set on the <a> object
+ *   `calendarControlsNextClass` |   string      |   The calendar next month button class, set on the <a> object
+ *   `calendarTableClass`        |   string      |   The calendar table class, set on the <table> object
+ *   `calendarTableHeaderClass`  |   string      |   The calendar table header class, set on the <tr> object that contains the day's labels
+ *   `calendarRowClass`          |   string      |   The calendar row class, set on all the other <tr> object as opposed to 'calendarTableHeaderClass'
+ *   `calendarDayClass`          |   string      |   The calendar day class, set on all <td> inside the calendar (ALSO in the header)
+ *   `calendarMonthClass`        |   string      |   The calendar month class, set on all <td> inside the calendar
+ *   `calendarLinkClass`         |   string      |   The calendar link class, set on the <a> object inside a day
+ *   `calendarTextClass`         |   string      |   The calendar text class, set on the <span> object inside the <a> object of a day (calendarLinkClass)
+ *   `calendarEventclass`        |   string      |   The calendar event class, set on the <td> wrapping the day with an event
+ *   `calendarEmptyDayClass`     |   string      |   The calendar empty day class, set on the <td> wrapping a day with no date
+ *   `calendarCurrentDayClass`   |   string      |   The calendar current day class, set on the <td> wrapping today's date
+ *   `calendarSelectedDayClass`  |   string      |   The calendar selected day class, set on the <td> wrapping the selected date
+ *   `calendarSelectedMonthClass`|   string      |   The calendar selected month class, set on the <td> wrapping the selected date's month
+ *
+ * `callbacks`                   |   object      |   Contains all possible callbacks
+ *   `onDayMouseOver`            |   function    |   Triggered when moving mouse over a day
+ *   `onEventMouseOver`          |   function    |   Triggered when moving mouse over a day with an event
+ *   `onDayMouseOut`             |   function    |   Triggered when moving mouse out of a day
+ *   `onEventMouseOut`           |   function    |   Triggered when moving mouse out of a day with an event
+ *   `onDayClick`                |   function    |   Triggered when clicking on a day
+ *   `onEventClick`              |   function    |   Triggered when clicking on a day with an event
+ *   `onPrev`                    |   function    |   Triggered when clicking on the previous button while in day mode / Added to the regular event @see changeMonth
+ *   `onNext`                    |   function    |   Triggered when clicking on the next button while in day mode / Added to the regular event @see changeMonth
+ *   `onNextYear`                |   function    |   Triggered when clicking on the next button while in month mode
+ *   `onPrevYear`                |   function    |   Triggered when clicking on the prev button while in month mode
+ *   `onChangeMonth`             |   function    |   Triggered after a new month has been loaded
+ *   `onGotoMonthView`           |   function    |   Triggered after switching to the month view
+ *   `onGotoDateView`            |   function    |   Triggered after switching to the date view
+ *
+ */
 
-(function($){
-     $.fn.calendar = function(options, more) {
+(function($) {
+    $.fn.calendar = function(options, more) {
         // If there's already a calendar, maybe we want to access the API.
         var calendar = $(this).data('calendar');
 
@@ -104,73 +104,73 @@
                 switch (options) {
 
                     // Destroy calendar, remove HTML, remove listeners.
-                    case 'destroy' :
+                    case 'destroy':
                         calendar.destroy();
-                    break;
+                        break;
 
-                    // Goes to next month
-                    case 'next' :
+                        // Goes to next month
+                    case 'next':
                         calendar.changeMonth(1);
-                    break;
+                        break;
 
-                    // Goes to previous month
-                    case 'prev' :
+                        // Goes to previous month
+                    case 'prev':
                         calendar.changeMonth(-1);
-                    break;
+                        break;
 
-                    // Returns the appropriate doc
-                    case 'addEvent' :
+                        // Returns the appropriate doc
+                    case 'addEvent':
                         if (more) {
                             calendar.addEvent(more);
                         }
-                    break;
+                        break;
 
-                    // Returns the appropriate doc
-                    case 'addEvents' :
+                        // Returns the appropriate doc
+                    case 'addEvents':
                         if (more) {
                             calendar.addEvents(more);
                         }
-                    break;
+                        break;
 
-                    // Returns the appropriate doc
-                    case 'setEvents' :
+                        // Returns the appropriate doc
+                    case 'setEvents':
                         if (more) {
                             calendar.setEvents(more);
                         }
-                    break;
+                        break;
 
-                    // Adds events
-                    // In that case, `more` is an event json
-                    case 'events' :
+                        // Adds events
+                        // In that case, `more` is an event json
+                    case 'events':
                         if (more) {
                             calendar.opts.events = more;
                             calendar.loadEvents();
                             calendar.load();
                         }
-                    break;
+                        break;
                 }
             }
             return calendar;
         }
 
         /**
-        * @var {object} defaults
-        * All the default settings
-        */
+         * @var {object} defaults
+         * All the default settings
+         */
         var defaults = {
-            startDate : new Date(),
-            lang : 'fr',
+            startDate: new Date(),
+            lang: 'fr',
             mode: 'date',
-            allowMonthView : false,
-            allowDateView : true,
-            useControls : true,
-            displayEventsNumber:true,
+            allowMonthView: false,
+            allowDateView: true,
+            useControls: true,
+            displayEventsNumber: true,
             eventsNumberTemplate: '<span class="c-calendar_num">{num}</span>',
 
             // Show the dates in the `-empty` boxes.
             displayAdjacentMonthDates: true,
 
-            events : {},
+            events: {},
 
             // Classes ( || html markup )
             classes: {
@@ -198,83 +198,83 @@
                 calendarEmptyDayClass: '-empty' // Not in the same month
             },
             callbacks: {
-                onChangeMonth : function(calendar) {
+                onChangeMonth: function(calendar) {
 
                 },
-                onChangeYear : function(calendar) {
+                onChangeYear: function(calendar) {
 
                 },
-                onDatePick : function(date, calendar) {
+                onDatePick: function(date, calendar) {
 
                 },
-                onMonthSelect : function(date, calendar) {
+                onMonthSelect: function(date, calendar) {
 
                 },
-                onDayClick : function(date, calendar) {
+                onDayClick: function(date, calendar) {
 
                 },
-                onEventClick : function(datas, calendar) {
+                onEventClick: function(datas, calendar) {
 
                 },
-                onDayMouseover : function(datas, calendar) { // Days with event
+                onDayMouseover: function(datas, calendar) { // Days with event
 
                 },
-                onEventMouseover : function(datas, calendar) { // Days with event
+                onEventMouseover: function(datas, calendar) { // Days with event
 
                 },
-                onDayMouseout : function(datas, calendar) { // Days with event
+                onDayMouseout: function(datas, calendar) { // Days with event
 
                 },
-                onEventMouseout : function(datas, calendar) { // Days with event
+                onEventMouseout: function(datas, calendar) { // Days with event
 
                 },
-                onPrev : function(calendar) {
+                onPrev: function(calendar) {
 
                 },
-                onNext : function(calendar) {
+                onNext: function(calendar) {
 
                 },
-                onPrevYear : function(calendar) {
+                onPrevYear: function(calendar) {
 
                 },
-                onNextYear : function(calendar) {
+                onNextYear: function(calendar) {
 
                 },
-                onGotoMonthView : function(calendar) {
+                onGotoMonthView: function(calendar) {
 
                 },
-                onGotoDateView : function(calendar) {
+                onGotoDateView: function(calendar) {
 
                 }
             },
 
             translations: {
                 months: {
-                    fr : ['Janvier', 'Février', 'Mars', 'Avril','Mai', 'Juin', 'Juillet', 'Août', 'Septembre','Octobre', 'Novembre', 'Décembre'],
-                    en :  ['January', 'February', 'March', 'April','May', 'June', 'July', 'August', 'September','October', 'November', 'December']
+                    fr: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
+                    en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
                 },
                 days: {
-                    fr : ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
-                    en : ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+                    fr: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
+                    en: ['S', 'M', 'T', 'W', 'T', 'F', 'S']
                 },
-                nextMonthLabel : {
-                    en : 'Next Month',
-                    fr : 'Mois suivant'
+                nextMonthLabel: {
+                    en: 'Next Month',
+                    fr: 'Mois suivant'
                 },
-                prevMonthLabel : {
-                    en : 'Previous Month',
-                    fr : 'Mois précédent'
+                prevMonthLabel: {
+                    en: 'Previous Month',
+                    fr: 'Mois précédent'
                 },
-                nextYearLabel : {
-                    en : 'Next Year',
-                    fr : 'Année suivante'
+                nextYearLabel: {
+                    en: 'Next Year',
+                    fr: 'Année suivante'
                 },
-                prevYearLabel : {
-                    en : 'Previous Year',
-                    fr : 'Année précédente'
+                prevYearLabel: {
+                    en: 'Previous Year',
+                    fr: 'Année précédente'
                 }
             },
-            eventSeparator : '{|}'
+            eventSeparator: '{|}'
         };
 
         // Merge options
@@ -304,11 +304,11 @@
 })(jQuery);
 
 /**
-* Class Calendar
-*
-* @param opts
-* @see doc above
-*/
+ * Class Calendar
+ *
+ * @param opts
+ * @see doc above
+ */
 var bCalendar = function(opts) {
     // All available string for strtr
     this._strings;
@@ -334,8 +334,8 @@ var bCalendar = function(opts) {
     this.setSelectedDate(opts.startDate);
     this.loadEvents();
 
-    this.month  = this.selectedDate.getMonth();
-    this.year   = this.selectedDate.getFullYear();
+    this.month = this.selectedDate.getMonth();
+    this.year = this.selectedDate.getFullYear();
 
     this.html = '';
 
@@ -346,18 +346,17 @@ var bCalendar = function(opts) {
  * Strings used in the calendar.
  * @return {array} All strings already localised when need be.
  */
-bCalendar.prototype.strings = function()
-{
+bCalendar.prototype.strings = function() {
     if (this._strings) {
         return this._strings;
     }
 
     var strings = this.opts.classes;
     strings = $.fn.extend(strings, {
-        prevYearLabel : this.opts.translations.prevYearLabel[ this.lang ],
-        nextYearLabel : this.opts.translations.nextYearLabel[ this.lang ],
-        nextMonthLabel : this.opts.translations.nextMonthLabel[ this.lang ],
-        prevMonthLabel : this.opts.translations.prevMonthLabel[ this.lang ],
+        prevYearLabel: this.opts.translations.prevYearLabel[this.lang],
+        nextYearLabel: this.opts.translations.nextYearLabel[this.lang],
+        nextMonthLabel: this.opts.translations.nextMonthLabel[this.lang],
+        prevMonthLabel: this.opts.translations.prevMonthLabel[this.lang],
     });
 
     this._strings = strings;
@@ -365,12 +364,11 @@ bCalendar.prototype.strings = function()
 }
 
 /**
-* Load listeners and all
-* Make sure no duplication is done.
-*
-*/
-bCalendar.prototype.load = function()
-{
+ * Load listeners and all
+ * Make sure no duplication is done.
+ *
+ */
+bCalendar.prototype.load = function() {
     var options = this.opts;
     // Make sure no duplication of event is done.
     this.destroy();
@@ -383,7 +381,7 @@ bCalendar.prototype.load = function()
 
     // Append HTML
     this.target.html(this.getHTML());
-    this.target.data('calendar',this);
+    this.target.data('calendar', this);
 
     this.addListeners();
 
@@ -394,8 +392,7 @@ bCalendar.prototype.load = function()
  * Append events in the event list
  * @param {object} events Array of events.
  */
-bCalendar.prototype.addEvents = function(events)
-{
+bCalendar.prototype.addEvents = function(events) {
     // Requires an array
     if (typeof event != 'object') {
         return false;
@@ -407,7 +404,7 @@ bCalendar.prototype.addEvents = function(events)
 
     var total = events.length;
     var i = 0;
-    for (; i<total; i++) {
+    for (; i < total; i++) {
         this.addEvent(events[i]);
     }
 
@@ -418,8 +415,7 @@ bCalendar.prototype.addEvents = function(events)
  * Dynamically add an event to the calendar when needed.
  * @param {object} event View events in documentation.
  */
-bCalendar.prototype.addEvent = function(event)
-{
+bCalendar.prototype.addEvent = function(event) {
     // Requires an array
     if (typeof event != 'object') {
         return false;
@@ -445,8 +441,7 @@ bCalendar.prototype.addEvent = function(event)
  * Set the calendar events / override existing.
  * @param {[type]} events [description]
  */
-bCalendar.prototype.setEvents = function(events)
-{
+bCalendar.prototype.setEvents = function(events) {
     // Requires an array of object.
     if (typeof events != 'object') {
         return false;
@@ -466,14 +461,13 @@ bCalendar.prototype.setEvents = function(events)
 
 
 /**
-* Load events into an array to quickly match
-* all request done to the calendar by date.
-* Uses this.opts.events
-*
-* @return this (chainable)
-*/
-bCalendar.prototype.loadEvents = function()
-{
+ * Load events into an array to quickly match
+ * all request done to the calendar by date.
+ * Uses this.opts.events
+ *
+ * @return this (chainable)
+ */
+bCalendar.prototype.loadEvents = function() {
     this.events = [];
     this.numEvents = [];
 
@@ -493,21 +487,21 @@ bCalendar.prototype.loadEvents = function()
             var first_date = new Date(this.unescapeDatas(opts.events[i]['date']));
             var last_date = first_date;
         }
-        var eDate = first_date;  
+        var eDate = first_date;
         var year = eDate.getFullYear();
         var month = eDate.getMonth();
 
         if (typeof this.numEvents[year] == 'undefined') {
             this.numEvents[year] = {
-                num : 0,
-                months : {}
+                num: 0,
+                months: {}
             };
         }
 
         if (typeof this.numEvents[year].months[month] == 'undefined') {
             this.numEvents[year].months[month] = {
                 num: 0,
-                days : {}
+                days: {}
             };
         }
 
@@ -534,8 +528,8 @@ bCalendar.prototype.loadEvents = function()
 
             if (typeof this.numEvents[year] == 'undefined') {
                 this.numEvents[year] = {
-                    num : 0,
-                    months : {}
+                    num: 0,
+                    months: {}
                 };
                 this.numEvents[year].num++;
             }
@@ -543,7 +537,7 @@ bCalendar.prototype.loadEvents = function()
             if (typeof this.numEvents[year].months[month] == 'undefined') {
                 this.numEvents[year].months[month] = {
                     num: 0,
-                    days : {}
+                    days: {}
                 };
                 this.numEvents[year].months[month].num++;
             }
@@ -555,7 +549,7 @@ bCalendar.prototype.loadEvents = function()
 
             this.events[year][month][day].push(opts.events[i]);
 
-            eDate = new Date(year, month, (day+1));
+            eDate = new Date(year, month, (day + 1));
         }
     }
 
@@ -563,12 +557,12 @@ bCalendar.prototype.loadEvents = function()
 }
 
 /**
-* Every data passed to this function will be cleaned and encoded for web
-* Recursive
-* Prevents output errors
-* @param {Object} data
-* @return {Object} data
-*/
+ * Every data passed to this function will be cleaned and encoded for web
+ * Recursive
+ * Prevents output errors
+ * @param {Object} data
+ * @return {Object} data
+ */
 bCalendar.prototype.escapeDatas = function(data) {
     var that = this;
 
@@ -593,7 +587,7 @@ bCalendar.prototype.escapeDatas = function(data) {
     if (typeof data == 'string') {
         // Do not escape twice.
         data = this.unescapeDatas(data);
-        return escape( data );
+        return escape(data);
     }
 
     // Default;
@@ -602,12 +596,12 @@ bCalendar.prototype.escapeDatas = function(data) {
 }
 
 /**
-* Every data passed to this function will be cleaned and encoded for web
-* Recursive
-* Prevents output errors
-* @param {Object} data
-* @return {Object} data
-*/
+ * Every data passed to this function will be cleaned and encoded for web
+ * Recursive
+ * Prevents output errors
+ * @param {Object} data
+ * @return {Object} data
+ */
 bCalendar.prototype.unescapeDatas = function(data) {
     var that = this;
 
@@ -632,15 +626,15 @@ bCalendar.prototype.unescapeDatas = function(data) {
 
 
 /**
-* Generates the HTML considering all the events and options
-* Automatic generations from a date
-* Adds the html in 'this.html' / Use this.getHTML() to retrieve the informations
-*
-* Uses the mode options to display month OR date
-*
-* @return this (chainable)
-*/
-bCalendar.prototype.generateHTML = function(){
+ * Generates the HTML considering all the events and options
+ * Automatic generations from a date
+ * Adds the html in 'this.html' / Use this.getHTML() to retrieve the informations
+ *
+ * Uses the mode options to display month OR date
+ *
+ * @return this (chainable)
+ */
+bCalendar.prototype.generateHTML = function() {
 
     var mode = this.opts.mode;
 
@@ -649,10 +643,10 @@ bCalendar.prototype.generateHTML = function(){
     switch (mode) {
         case 'month':
             return this.generateMonthView();
-        break;
+            break;
         case 'date':
             return this.generateDateView();
-        break;
+            break;
     }
 
     // Default
@@ -661,13 +655,13 @@ bCalendar.prototype.generateHTML = function(){
 }
 
 /**
-* Month view
-* Generates the HTML considering all the events and options
-* Automatic generations from a date
-* Adds the html in 'this.html' / Use this.getHTML() to retrieve the informations
-*
-* @return {thisArg} (chainable)
-*/
+ * Month view
+ * Generates the HTML considering all the events and options
+ * Automatic generations from a date
+ * Adds the html in 'this.html' / Use this.getHTML() to retrieve the informations
+ *
+ * @return {thisArg} (chainable)
+ */
 bCalendar.prototype.generateMonthView = function() {
     // Strings to be used with strtr for the html template
     var strings = this.strings();
@@ -681,7 +675,7 @@ bCalendar.prototype.generateMonthView = function() {
     var startingDay = firstDay.getDay();
 
     // Months by lang.
-    var months = opts.translations.months[ opts.lang ];
+    var months = opts.translations.months[opts.lang];
 
     // find number of days in month
     var monthLength = firstDay.getLastDayOfMonth();
@@ -698,19 +692,19 @@ bCalendar.prototype.generateMonthView = function() {
     var num = this.getNumEvents(firstDay, 'year');
     if (opts.displayEventsNumber && num != 0) {
         var numTemplate = opts.eventsNumberTemplate.strtr({
-            num : num
+            num: num
         });
-        html += '<p class="{calendarTitleClass}">{year}'+numTemplate+'</p>';
+        html += '<p class="{calendarTitleClass}">{year}' + numTemplate + '</p>';
     } else {
         html += '<p class="{calendarTitleClass}">{year}</p>';
     }
 
     // Calendar Controls
     if (opts.useControls) {
-        html += '<div class="{calendarControlsClass}">'+
-                    '<button class="{calendarControlsPrevClass}" type="button">{prevYearLabel}</button>'+
-                    '<button class="{calendarControlsNextClass}" type="button">{nextYearLabel}</button>'+
-                '</div>';
+        html += '<div class="{calendarControlsClass}">' +
+            '<button class="{calendarControlsPrevClass}" type="button">{prevYearLabel}</button>' +
+            '<button class="{calendarControlsNextClass}" type="button">{nextYearLabel}</button>' +
+            '</div>';
     }
 
     html += '<table class="{calendarTableClass}">';
@@ -723,14 +717,15 @@ bCalendar.prototype.generateMonthView = function() {
         for (var j = 0; j <= 3; j++) {
 
             // Month index, starting at 0;
-            var monthIndex = parseInt((i*4)+j);
+            var monthIndex = parseInt((i * 4) + j);
             var monthLabel = months[monthIndex];
-            var monthDate  = new Date(this.year+'/'+(monthIndex+1)+'/1');
+            var monthDate = new Date(this.year + '/' + (monthIndex + 1) + '/1');
 
             // Month + 1 = Valid Date (getMonth() returns 0 to 11, valid date = 1 to 12)
-            var events      = this.getEventsByMonth(this.year+'/'+(monthIndex+1)+'/1');
-            var hasEvents   = !jQuery.isEmptyObject(events);
-            var extraClass  = hasEvents ?' {calendarEventclass}' : '';
+            var events = this.getEventsByMonth(this.year + '/' + (monthIndex + 1) + '/1');
+            var hasEvents = !jQuery.isEmptyObject(events);
+            var extraClass = hasEvents ? ' {calendarEventclass}' : '';
+            var extraAttr = '';
 
             if (this.selectedDate.getMonth() == monthIndex && this.selectedDate.getFullYear() == this.year) {
                 extraClass += ' {calendarSelectedMonthClass}';
@@ -738,18 +733,18 @@ bCalendar.prototype.generateMonthView = function() {
 
             var num = this.getNumEvents(monthDate, 'month');
             if (opts.displayEventsNumber) {
-                extraClass += ' data-num="'+num+'"';
+                extraAttr += ' data-num="' + num + '"';
             }
 
-            html += '<td class="{calendarMonthClass}'+ extraClass +'"'+
-                ' data-date="'+ this.year + '/' + (monthIndex+1) +'/1'+'">'+
+            html += '<td class="{calendarMonthClass}' + extraClass + '"' + extraAttr +
+                ' data-date="' + this.year + '/' + (monthIndex + 1) + '/1' + '">' +
                 '   <a class="{calendarLinkClass}" href="#"><span class="{calendarTextClass}">';
             html += monthLabel;
             html += '</span>';
 
             if (opts.displayEventsNumber && num != 0) {
                 var numTemplate = opts.eventsNumberTemplate.strtr({
-                    num : num
+                    num: num
                 });
                 html += numTemplate;
             }
@@ -766,13 +761,13 @@ bCalendar.prototype.generateMonthView = function() {
 }
 
 /**
-* Date view
-* Generates the HTML considering all the events and options
-* Automatic generations from a date
-* Adds the html in 'this.html' / Use this.getHTML() to retrieve the informations
-*
-* @return this (chainable)
-*/
+ * Date view
+ * Generates the HTML considering all the events and options
+ * Automatic generations from a date
+ * Adds the html in 'this.html' / Use this.getHTML() to retrieve the informations
+ *
+ * @return this (chainable)
+ */
 bCalendar.prototype.generateDateView = function() {
     var strings = this.strings();
 
@@ -785,44 +780,44 @@ bCalendar.prototype.generateDateView = function() {
     var monthLength = firstDay.getLastDayOfMonth();
 
     // Last month...
-    var previousMonth = this.month-1;
+    var previousMonth = this.month - 1;
     if (previousMonth < 0) {
         previousMonth = 11;
     }
     var previousMonthDate = new Date(this.year, previousMonth, 1);
     var previousMonthLength = previousMonthDate.getLastDayOfMonth();
-    var previousMonthDifferencial = previousMonthLength - (startingDay-1);
+    var previousMonthDifferencial = previousMonthLength - (startingDay - 1);
 
     // Header
     var monthName = this.aMonths[this.lang][this.month];
     strings.monthName = monthName;
     strings.year = this.year;
 
-    var html = '<div class="{mainCalendarClass}">'+
-            '<p class="{calendarTitleClass}">'+
-                '<a href="#" class="{calendarMonthLabelClass}">'+
-                    '<span class="{calendarTitleMonthClass}">{monthName} </span>'+
-                    '<span class="{calendarTitleYearClass}">{year}</span>'+
-                '</a>'+
-            '</p>';
+    var html = '<div class="{mainCalendarClass}">' +
+        '<p class="{calendarTitleClass}">' +
+        '<a href="#" class="{calendarMonthLabelClass}">' +
+        '<span class="{calendarTitleMonthClass}">{monthName} </span>' +
+        '<span class="{calendarTitleYearClass}">{year}</span>' +
+        '</a>' +
+        '</p>';
 
     // Calendar Controls
     if (opts.useControls) {
-        html += '<div class="{calendarControlsClass}">'+
-                    '<button class="{calendarControlsPrevClass}" type="button">{prevMonthLabel}</button>'+
-                    '<button class="{calendarControlsNextClass}" type="button">{nextMonthLabel}</button>'+
-                '</div>';
+        html += '<div class="{calendarControlsClass}">' +
+            '<button class="{calendarControlsPrevClass}" type="button">{prevMonthLabel}</button>' +
+            '<button class="{calendarControlsNextClass}" type="button">{nextMonthLabel}</button>' +
+            '</div>';
     }
 
-    html += '<table class="{calendarTableClass}"><thead class="{calendarTableHeaderClass}">'+
-                '<tr class="{calendarRowClass}">';
-    for(var i = 0; i <= 6; i++ ){
+    html += '<table class="{calendarTableClass}"><thead class="{calendarTableHeaderClass}">' +
+        '<tr class="{calendarRowClass}">';
+    for (var i = 0; i <= 6; i++) {
         html += '<th class="{calendarDayClass}"><span class="{calendarTextClass}">';
         html += this.aDays[this.lang][i];
         html += '</span></th>';
     }
-    html += '</tr></thead>'+
-            '</tr><tbody><tr class="{calendarRowClass}">';
+    html += '</tr></thead>' +
+        '</tr><tbody><tr class="{calendarRowClass}">';
 
     // fill in the days
     var day = 1;
@@ -839,45 +834,43 @@ bCalendar.prototype.generateDateView = function() {
             var hasDay = day <= monthLength && (i > 0 || j >= startingDay);
 
             // Adds as data on the object
-            var dataDate = ( hasDay ? this.year + '/' + (this.month+1) +'/'+day : 0 );
+            var dataDate = (hasDay ? this.year + '/' + (this.month + 1) + '/' + day : 0);
 
             var events = {};
             if (i === 0 && j < startingDay) {
                 // Since we need to add 1 to the current month here we don't have to remove 1.
                 var previousMonth = (this.month == 0) ? 12 : this.month;
-                dataDate = this.year+'/'+previousMonth+'/'+previousMonthDifferencial;
+                dataDate = this.year + '/' + previousMonth + '/' + previousMonthDifferencial;
                 events = this.getEventsByDate(dataDate);
-            }
-            else if (!hasDay && i > 0) {
-                var nextMonth = (this.month >= 11) ? 1 : (this.month+2); // +1, current value, +1 next month
-                dataDate = this.year+'/'+nextMonth+'/'+nextMonthDays;
+            } else if (!hasDay && i > 0) {
+                var nextMonth = (this.month >= 11) ? 1 : (this.month + 2); // +1, current value, +1 next month
+                dataDate = this.year + '/' + nextMonth + '/' + nextMonthDays;
                 events = this.getEventsByDate(dataDate);
-            }
-            else {
+            } else {
                 events = this.getEventsByDate(currentDayDate);
             }
 
             var hasEvents = !jQuery.isEmptyObject(events);
-            var extraClass = hasEvents ?' {calendarEventclass}':'';
+            var extraClass = hasEvents ? ' {calendarEventclass}' : '';
 
             // Sets "today" on the startDate (defined in options, defaults to today)
-            if (opts.startDate.getFullYear() == this.year && 
-                opts.startDate.getMonth() == this.month && 
-                opts.startDate.getDate() == day && 
+            if (opts.startDate.getFullYear() == this.year &&
+                opts.startDate.getMonth() == this.month &&
+                opts.startDate.getDate() == day &&
                 hasDay) {
                 extraClass += ' {calendarCurrentDayClass}';
             }
 
             // Sets "selected" class on the currently selected date.
-            if (this.selectedDate.getFullYear() == this.year && 
-                this.selectedDate.getMonth() == this.month && 
-                this.selectedDate.getDate() == day && 
+            if (this.selectedDate.getFullYear() == this.year &&
+                this.selectedDate.getMonth() == this.month &&
+                this.selectedDate.getDate() == day &&
                 hasDay) {
                 extraClass += ' {calendarSelectedDayClass}';
             }
 
-            html += '<td class="{calendarDayClass}'+ ( hasDay ? '':' {calendarEmptyDayClass}' ) + extraClass +
-                '" data-date="'+ dataDate +'">';
+            html += '<td class="{calendarDayClass}' + (hasDay ? '' : ' {calendarEmptyDayClass}') + extraClass +
+                '" data-date="' + dataDate + '">';
 
             html += '<a class="{calendarLinkClass}" href="#">';
             html += '<span class="{calendarTextClass}">';
@@ -885,14 +878,12 @@ bCalendar.prototype.generateDateView = function() {
             if (hasDay) {
                 html += day;
                 day++;
-            }
-            else if (i === 0) {
+            } else if (i === 0) {
                 if (opts.displayAdjacentMonthDates) {
                     html += previousMonthDifferencial;
                 }
                 previousMonthDifferencial++;
-            }
-            else {
+            } else {
                 html += nextMonthDays;
                 nextMonthDays++;
             }
@@ -902,7 +893,7 @@ bCalendar.prototype.generateDateView = function() {
             var num = this.getNumEvents(currentDayDate);
             if (opts.displayEventsNumber && num != 0 && hasDay) {
                 var numTemplate = opts.eventsNumberTemplate.strtr({
-                    num : num
+                    num: num
                 });
                 html += numTemplate;
             }
@@ -924,22 +915,21 @@ bCalendar.prototype.generateDateView = function() {
 }
 
 /**
-* Gets all events from a date
-* Considers the actual date (year / month / date)
-*
-* @param date date Any date format
-* @return {Array} Empty [] | Object [{}] | Multiple objects [{},{}] Events from that day.
-*/
-bCalendar.prototype.getEventsByDate = function(date)
-{
+ * Gets all events from a date
+ * Considers the actual date (year / month / date)
+ *
+ * @param date date Any date format
+ * @return {Array} Empty [] | Object [{}] | Multiple objects [{},{}] Events from that day.
+ */
+bCalendar.prototype.getEventsByDate = function(date) {
     if (!(date instanceof Date)) {
         date = new Date(date);
     }
 
     // Stock new value
-    var month   = date.getMonth();
-    var year    = date.getFullYear();
-    var day     = date.getDate();
+    var month = date.getMonth();
+    var year = date.getFullYear();
+    var day = date.getDate();
 
     if (typeof this.events[year] == 'undefined') {
         return {};
@@ -957,28 +947,27 @@ bCalendar.prototype.getEventsByDate = function(date)
 }
 
 /**
-* Gets all events from a month
-* Accepts multiple type of date
-* Examples:
-* `september 2020`
-* `1421425977331`
-* `september 12 2010`
-* `2020/9/12`
-*
-* @param {mixed} date Any date format
-* @return {Object} Empty {} | Event { 6 : {event}} | Multiple events { 6 : {event}, 10 : {event}}
-* Returns object with DATE as keys
-*/
-bCalendar.prototype.getEventsByMonth = function(date)
-{
+ * Gets all events from a month
+ * Accepts multiple type of date
+ * Examples:
+ * `september 2020`
+ * `1421425977331`
+ * `september 12 2010`
+ * `2020/9/12`
+ *
+ * @param {mixed} date Any date format
+ * @return {Object} Empty {} | Event { 6 : {event}} | Multiple events { 6 : {event}, 10 : {event}}
+ * Returns object with DATE as keys
+ */
+bCalendar.prototype.getEventsByMonth = function(date) {
     if (!(date instanceof Date)) {
         // Object Date
         date = new Date(date);
     }
 
     // Stock new value
-    var month   = date.getMonth();
-    var year    = date.getFullYear();
+    var month = date.getMonth();
+    var year = date.getFullYear();
 
     if (typeof this.events[year] == 'undefined') {
         return {};
@@ -993,22 +982,21 @@ bCalendar.prototype.getEventsByMonth = function(date)
 
 
 /**
-* Unique function to switch between months
-* Accepts any number, but will only consider positive VS negative values
-*
-* @param int 1 | -1
-* @return {Object} this (chainable)
-*/
-bCalendar.prototype.changeMonth = function(dir)
-{
+ * Unique function to switch between months
+ * Accepts any number, but will only consider positive VS negative values
+ *
+ * @param int 1 | -1
+ * @return {Object} this (chainable)
+ */
+bCalendar.prototype.changeMonth = function(dir) {
     // Using '-1 and 1' as directions
-    var direction = (dir == undefined || dir > 0)?1:-1;
+    var direction = (dir == undefined || dir > 0) ? 1 : -1;
 
     // Changes YEAR
     if ((this.month == 0 && direction == -1) || (this.month == 11 && direction == 1)) {
         this.year += direction;
         // For simplicity, if month is zero and direction is '-1', then -11*-1 = 11 (new index)
-        this.month += -11*direction;
+        this.month += -11 * direction;
     } else {
         this.month += direction;
     }
@@ -1020,16 +1008,15 @@ bCalendar.prototype.changeMonth = function(dir)
 }
 
 /**
-* Unique function to switch between years
-* Accepts any number
-*
-* @param int
-* @return {Object} this (chainable)
-*/
-bCalendar.prototype.changeYear = function(dir)
-{
+ * Unique function to switch between years
+ * Accepts any number
+ *
+ * @param int
+ * @return {Object} this (chainable)
+ */
+bCalendar.prototype.changeYear = function(dir) {
     // Using '-1 and 1' as directions
-    var direction = (dir == undefined || dir > 0)?1:-1;
+    var direction = (dir == undefined || dir > 0) ? 1 : -1;
 
     this.year = this.year + dir;
 
@@ -1040,19 +1027,18 @@ bCalendar.prototype.changeYear = function(dir)
 }
 
 /**
-* Triggers the calendar to change date to a specific date.
-* Multiple date formats
-* Examples:
-* `september 2020`
-* `1421425977331`
-* `september 12 2010`
-* `2020/9/12`
-*
-* @param {mixed} Date | Valid date string (examples above)
-* @return this (chainable)
-*/
-bCalendar.prototype.goToDate = function(date)
-{
+ * Triggers the calendar to change date to a specific date.
+ * Multiple date formats
+ * Examples:
+ * `september 2020`
+ * `1421425977331`
+ * `september 12 2010`
+ * `2020/9/12`
+ *
+ * @param {mixed} Date | Valid date string (examples above)
+ * @return this (chainable)
+ */
+bCalendar.prototype.goToDate = function(date) {
     if (!(date instanceof Date)) {
         date = new Date(date);
     }
@@ -1069,23 +1055,25 @@ bCalendar.prototype.goToDate = function(date)
 
 
 /**
-* Gets the event datas over an calendar dom object
-* Mainly internal use
-*
-* @param {jQuery Dom object} elem | Elem that can trigger calendar events
-* @return {Object} ret | { date : date, events : [{event},{event}] }
-*/
-bCalendar.prototype._eventDatas = function(elem)
-{
+ * Gets the event datas over an calendar dom object
+ * Mainly internal use
+ *
+ * @param {jQuery Dom object} elem | Elem that can trigger calendar events
+ * @return {Object} ret | { date : date, events : [{event},{event}] }
+ */
+bCalendar.prototype._eventDatas = function(elem) {
     var date = elem.data('date');
     if (!date) {
-        return { date : null, events : [] }
+        return {
+            date: null,
+            events: []
+        }
     }
     date = new Date(date);
 
     var ret = {
-        date : date,
-        events : this.getEventsByDate(date)
+        date: date,
+        events: this.getEventsByDate(date)
     }
 
     // Return
@@ -1098,8 +1086,7 @@ bCalendar.prototype._eventDatas = function(elem)
  * @param {mixed} date Selected date.
  * @return {thisArg} Chainable.
  */
-bCalendar.prototype.setSelectedDate = function(date)
-{
+bCalendar.prototype.setSelectedDate = function(date) {
     if (!(date instanceof Date)) {
         date = new Date(date);
     }
@@ -1109,29 +1096,28 @@ bCalendar.prototype.setSelectedDate = function(date)
 }
 
 /**
-* Adds all listeners on the calendar with default and custom callbacks
-* `onDayClick`
-* `onEventClick`
-* `onDayMouseover`
-* `onEventMouseover`
-* `onDayMouseout`
-* `onEventMouseout`
-* `onPrev`
-* `onNext`
-*
-*
-* @return this (chainable)
-*/
+ * Adds all listeners on the calendar with default and custom callbacks
+ * `onDayClick`
+ * `onEventClick`
+ * `onDayMouseover`
+ * `onEventMouseover`
+ * `onDayMouseout`
+ * `onEventMouseout`
+ * `onPrev`
+ * `onNext`
+ *
+ *
+ * @return this (chainable)
+ */
 bCalendar.prototype.addListeners = function() {
     var that = this;
     var opts = this.opts;
 
     // Click on a day with or without event
-    this.target.on('click.bCalendar', '.'+opts.classes.calendarDayClass, function(e)
-    {
+    this.target.on('click.bCalendar', '.' + opts.classes.calendarDayClass, function(e) {
         e.preventDefault();
 
-        var datas = that.unescapeDatas( that._eventDatas($(this)) );
+        var datas = that.unescapeDatas(that._eventDatas($(this)));
         that.setSelectedDate(datas.date);
         that.refresh();
 
@@ -1140,18 +1126,16 @@ bCalendar.prototype.addListeners = function() {
     })
 
     // Click on a day with events
-    .on('click.bCalendar', '.'+opts.classes.calendarEventclass+'.'+opts.classes.calendarDayClass, function(e)
-    {
+    .on('click.bCalendar', '.' + opts.classes.calendarEventclass + '.' + opts.classes.calendarDayClass, function(e) {
         e.preventDefault();
-        var datas = that.unescapeDatas( that._eventDatas($(this)) );
+        var datas = that.unescapeDatas(that._eventDatas($(this)));
 
         opts.callbacks.onEventClick(datas, that);
 
     })
 
     // Mouseover any day
-    .on('mouseenter.bCalendar', '.'+opts.classes.calendarDayClass, function(e)
-    {
+    .on('mouseenter.bCalendar', '.' + opts.classes.calendarDayClass, function(e) {
         e.preventDefault();
         console.log('mouseover');
 
@@ -1161,8 +1145,7 @@ bCalendar.prototype.addListeners = function() {
     })
 
     // Mouseover a day with event(s)
-    .on('mouseenter.bCalendar', '.'+opts.classes.calendarEventclass+'.'+opts.classes.calendarDayClass, function(e)
-    {
+    .on('mouseenter.bCalendar', '.' + opts.classes.calendarEventclass + '.' + opts.classes.calendarDayClass, function(e) {
         e.preventDefault();
 
         var datas = that.unescapeDatas(that._eventDatas($(this)));
@@ -1171,8 +1154,7 @@ bCalendar.prototype.addListeners = function() {
     })
 
     // Mouseout any day
-    .on('mouseout.bCalendar', '.'+opts.classes.calendarEventclass+'.'+opts.classes.calendarDayClass, function(e)
-    {
+    .on('mouseout.bCalendar', '.' + opts.classes.calendarEventclass + '.' + opts.classes.calendarDayClass, function(e) {
         e.preventDefault();
 
         var datas = that.unescapeDatas(that._eventDatas($(this)));
@@ -1181,8 +1163,7 @@ bCalendar.prototype.addListeners = function() {
     })
 
     // Mouseout a day with event(s)
-    .on('mouseout.bCalendar', '.'+opts.classes.calendarDayClass, function(e)
-    {
+    .on('mouseout.bCalendar', '.' + opts.classes.calendarDayClass, function(e) {
         e.preventDefault();
 
         var datas = that._eventDatas($(this));
@@ -1191,8 +1172,7 @@ bCalendar.prototype.addListeners = function() {
     })
 
     // Controls click
-    .on('click.bCalendar', '.'+opts.classes.calendarControlsPrevClass, function(e)
-    {
+    .on('click.bCalendar', '.' + opts.classes.calendarControlsPrevClass, function(e) {
         e.preventDefault();
 
         if (opts.mode == 'date') {
@@ -1207,8 +1187,7 @@ bCalendar.prototype.addListeners = function() {
     })
 
     // Controls click
-    .on('click.bCalendar', '.'+opts.classes.calendarControlsNextClass, function(e)
-    {
+    .on('click.bCalendar', '.' + opts.classes.calendarControlsNextClass, function(e) {
         e.preventDefault();
 
         if (opts.mode == 'date') {
@@ -1222,8 +1201,7 @@ bCalendar.prototype.addListeners = function() {
     })
 
     // Controls click
-    .on('click.bCalendar', '.'+opts.classes.calendarMonthLabelClass, function(e)
-    {
+    .on('click.bCalendar', '.' + opts.classes.calendarMonthLabelClass, function(e) {
         e.preventDefault();
 
         if (that.opts.allowMonthView) {
@@ -1235,8 +1213,7 @@ bCalendar.prototype.addListeners = function() {
     })
 
     // Controls click
-    .on('click.bCalendar', '.'+opts.classes.calendarMonthClass, function(e)
-    {
+    .on('click.bCalendar', '.' + opts.classes.calendarMonthClass, function(e) {
         e.preventDefault();
         var date = new Date($(this).data('date'));
         if (that.opts.allowDateView) {
@@ -1256,10 +1233,10 @@ bCalendar.prototype.addListeners = function() {
 }
 
 /**
-* Refreshes the calendar with all current options
-*
-* @return this (chainable)
-*/
+ * Refreshes the calendar with all current options
+ *
+ * @return this (chainable)
+ */
 bCalendar.prototype.refresh = function(cb) {
     this.generateHTML();
     this.target.html(this.getHTML());
@@ -1272,12 +1249,12 @@ bCalendar.prototype.refresh = function(cb) {
 }
 
 /**
-* Gets html
-* Mainly internal use
-* @return {HTML} html
-*/
+ * Gets html
+ * Mainly internal use
+ * @return {HTML} html
+ */
 bCalendar.prototype.getHTML = function() {
-  return this.html;
+    return this.html;
 }
 
 /**
@@ -1296,8 +1273,7 @@ bCalendar.prototype.destroy = function() {
  * @param  {string} mode Either year, month or day (defaults to day).
  * @return {integer}     Number of events
  */
-bCalendar.prototype.getNumEvents = function(date, mode)
-{
+bCalendar.prototype.getNumEvents = function(date, mode) {
     if (!(date instanceof Date)) {
         date = new Date(date);
     }
@@ -1335,12 +1311,13 @@ bCalendar.prototype.getNumEvents = function(date, mode)
  * @return {string}      Modified string.
  */
 if (typeof String.prototype.strtr === 'undefined') {
-    String.prototype.strtr = function (args) {
+    String.prototype.strtr = function(args) {
         "use strict";
-        var str = this.toString(), key, re;
+        var str = this.toString(),
+            key, re;
         for (key in args) {
             if (args.hasOwnProperty(key)) {
-                re = new RegExp('{'+key+'}', "g");
+                re = new RegExp('{' + key + '}', "g");
                 str = str.replace(re, args[key]);
             }
         }
@@ -1354,16 +1331,15 @@ if (typeof String.prototype.strtr === 'undefined') {
  * @return {integer}         Number of days in the month / last day of the month.
  */
 if (typeof Date.prototype.getLastDayOfMonth === 'undefined') {
-    Date.prototype.getLastDayOfMonth = function(date)
-    {
+    Date.prototype.getLastDayOfMonth = function(date) {
         if (!date) {
-            return new Date(this.getYear(), this.getMonth()+1, 0).getDate();
+            return new Date(this.getYear(), this.getMonth() + 1, 0).getDate();
         }
 
         if (!(date instanceof Date)) {
             date = new Date(date);
         }
 
-        return new Date(date.getYear(), date.getMonth()+1, 0).getDate();
+        return new Date(date.getYear(), date.getMonth() + 1, 0).getDate();
     }
 }
