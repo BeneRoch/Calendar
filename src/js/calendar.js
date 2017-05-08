@@ -210,22 +210,25 @@
                 onMonthSelect: function(date, calendar) {
 
                 },
+                onMonthEventSelect: function(events, calendar) {
+
+                },
                 onDayClick: function(date, calendar) {
 
                 },
-                onEventClick: function(datas, calendar) {
+                onEventClick: function(events, calendar) {
 
                 },
-                onDayMouseover: function(datas, calendar) { // Days with event
+                onDayMouseover: function(events, calendar) { // All days
 
                 },
-                onEventMouseover: function(datas, calendar) { // Days with event
+                onEventMouseover: function(events, calendar) { // Days with event
 
                 },
-                onDayMouseout: function(datas, calendar) { // Days with event
+                onDayMouseout: function(events, calendar) { // All days
 
                 },
-                onEventMouseout: function(datas, calendar) { // Days with event
+                onEventMouseout: function(events, calendar) { // Days with event
 
                 },
                 onPrev: function(calendar) {
@@ -373,7 +376,7 @@ bCalendar.prototype.load = function() {
     // Make sure no duplication of event is done.
     this.destroy();
 
-    // Keep datas
+    // Keep data
     this.opts = options;
 
     // Generate HTML
@@ -468,8 +471,10 @@ bCalendar.prototype.setEvents = function(events) {
  * @return this (chainable)
  */
 bCalendar.prototype.loadEvents = function() {
-    this.events = [];
-    this.numEvents = [];
+    this.singleEvents = {};
+    this.events = {};
+    this.numEvents = {};
+
 
     var opts = this.opts;
 
@@ -491,66 +496,91 @@ bCalendar.prototype.loadEvents = function() {
         var year = eDate.getFullYear();
         var month = eDate.getMonth();
 
-        if (typeof this.numEvents[year] == 'undefined') {
-            this.numEvents[year] = {
-                num: 0,
-                months: {}
-            };
-        }
-
-        if (typeof this.numEvents[year].months[month] == 'undefined') {
-            this.numEvents[year].months[month] = {
-                num: 0,
-                days: {}
-            };
-        }
+        // Make sure every step of the array is set up
+        this.checkEventsArray(year, month);
 
         this.numEvents[year].num++;
         this.numEvents[year].months[month].num++;
+        this.singleEvents[year].months[month].push(opts.events[i]);
+
+        var currentMonth = month;
+        var currentYear = year;
 
         while (eDate <= last_date) {
             year = eDate.getFullYear();
             month = eDate.getMonth();
             var day = eDate.getDate();
 
-            // BUILDING events array
-            if (typeof this.events[year] == 'undefined') {
-                this.events[year] = {};
-            }
-
-            if (typeof this.events[year][month] == 'undefined') {
-                this.events[year][month] = {};
-            }
+            // Make sure every step of the array is set up
+            this.checkEventsArray(year, month);
 
             if (typeof this.events[year][month][day] == 'undefined') {
                 this.events[year][month][day] = [];
             }
+            this.events[year][month][day].push(opts.events[i]);
 
-            if (typeof this.numEvents[year] == 'undefined') {
-                this.numEvents[year] = {
-                    num: 0,
-                    months: {}
-                };
-                this.numEvents[year].num++;
-            }
-
-            if (typeof this.numEvents[year].months[month] == 'undefined') {
-                this.numEvents[year].months[month] = {
-                    num: 0,
-                    days: {}
-                };
-                this.numEvents[year].months[month].num++;
-            }
-
+            // Remember the number of events
             if (typeof this.numEvents[year].months[month].days[day] == 'undefined') {
                 this.numEvents[year].months[month].days[day] = 0;
             }
             this.numEvents[year].months[month].days[day]++;
 
-            this.events[year][month][day].push(opts.events[i]);
+            // Set events by year
+            if (currentYear != year) {
+                this.numEvents[year].num++;
+            }
 
+            // Set events by month
+            if (currentMonth != month) {
+                this.numEvents[year].months[month].num++;
+                this.singleEvents[year].months[month].push(opts.events[i]);
+            }
+
+            // Set date + 1
             eDate = new Date(year, month, (day + 1));
+
+            // Dont duplicate entries
+            currentMonth = month;
+            currentYear = year;
         }
+    }
+
+    return this;
+}
+
+bCalendar.prototype.checkEventsArray = function(year, month) {
+    // BUILDING events array
+    if (typeof this.events[year] == 'undefined') {
+        this.events[year] = {};
+    }
+
+    if (typeof this.events[year][month] == 'undefined') {
+        this.events[year][month] = {};
+    }
+
+    // Number of events
+    if (typeof this.numEvents[year] == 'undefined') {
+        this.numEvents[year] = {
+            num: 0,
+            months: {}
+        };
+
+    }
+    if (typeof this.numEvents[year].months[month] == 'undefined') {
+        this.numEvents[year].months[month] = {
+            num: 0,
+            days: {}
+        };
+    }
+
+    // Uniq events by months
+    if (typeof this.singleEvents[year] == 'undefined') {
+        this.singleEvents[year] = {
+            months: {}
+        };
+    }
+    if (typeof this.singleEvents[year].months[month] == 'undefined') {
+        this.singleEvents[year].months[month] = [];
     }
 
     return this;
@@ -724,6 +754,7 @@ bCalendar.prototype.generateMonthView = function() {
             // Month + 1 = Valid Date (getMonth() returns 0 to 11, valid date = 1 to 12)
             var events = this.getEventsByMonth(this.year + '/' + (monthIndex + 1) + '/1');
             var hasEvents = !jQuery.isEmptyObject(events);
+
             var extraClass = hasEvents ? ' {calendarEventclass}' : '';
             var extraAttr = '';
 
@@ -969,15 +1000,15 @@ bCalendar.prototype.getEventsByMonth = function(date) {
     var month = date.getMonth();
     var year = date.getFullYear();
 
-    if (typeof this.events[year] == 'undefined') {
+    if (typeof this.singleEvents[year] == 'undefined') {
         return {};
     }
 
-    if (typeof this.events[year][month] == 'undefined') {
+    if (typeof this.singleEvents[year].months[month] == 'undefined') {
         return {};
     }
 
-    return this.events[year][month];
+    return this.singleEvents[year].months[month];
 }
 
 
@@ -1055,7 +1086,7 @@ bCalendar.prototype.goToDate = function(date) {
 
 
 /**
- * Gets the event datas over an calendar dom object
+ * Gets the event data over an calendar dom object
  * Mainly internal use
  *
  * @param {jQuery Dom object} elem | Elem that can trigger calendar events
@@ -1117,30 +1148,29 @@ bCalendar.prototype.addListeners = function() {
     this.target.on('click.bCalendar', '.' + opts.classes.calendarDayClass, function(e) {
         e.preventDefault();
 
-        var datas = that.unescapeDatas(that._eventDatas($(this)));
-        that.setSelectedDate(datas.date);
+        var data = that.unescapeDatas(that._eventDatas($(this)));
+        that.setSelectedDate(data.date);
         that.refresh();
 
-        opts.callbacks.onDayClick(datas, that);
+        opts.callbacks.onDayClick(data, that);
 
     })
 
     // Click on a day with events
     .on('click.bCalendar', '.' + opts.classes.calendarEventclass + '.' + opts.classes.calendarDayClass, function(e) {
         e.preventDefault();
-        var datas = that.unescapeDatas(that._eventDatas($(this)));
+        var data = that.unescapeDatas(that._eventDatas($(this)));
 
-        opts.callbacks.onEventClick(datas, that);
+        opts.callbacks.onEventClick(data, that);
 
     })
 
     // Mouseover any day
     .on('mouseenter.bCalendar', '.' + opts.classes.calendarDayClass, function(e) {
         e.preventDefault();
-        console.log('mouseover');
 
-        var datas = that.unescapeDatas(that._eventDatas($(this)));
-        opts.callbacks.onDayMouseover(datas, that);
+        var data = that.unescapeDatas(that._eventDatas($(this)));
+        opts.callbacks.onDayMouseover(data, that);
 
     })
 
@@ -1148,8 +1178,8 @@ bCalendar.prototype.addListeners = function() {
     .on('mouseenter.bCalendar', '.' + opts.classes.calendarEventclass + '.' + opts.classes.calendarDayClass, function(e) {
         e.preventDefault();
 
-        var datas = that.unescapeDatas(that._eventDatas($(this)));
-        opts.callbacks.onEventMouseover(datas, that);
+        var data = that.unescapeDatas(that._eventDatas($(this)));
+        opts.callbacks.onEventMouseover(data, that);
 
     })
 
@@ -1157,8 +1187,8 @@ bCalendar.prototype.addListeners = function() {
     .on('mouseout.bCalendar', '.' + opts.classes.calendarEventclass + '.' + opts.classes.calendarDayClass, function(e) {
         e.preventDefault();
 
-        var datas = that.unescapeDatas(that._eventDatas($(this)));
-        opts.callbacks.onEventMouseout(datas, that);
+        var data = that.unescapeDatas(that._eventDatas($(this)));
+        opts.callbacks.onEventMouseout(data, that);
 
     })
 
@@ -1166,8 +1196,8 @@ bCalendar.prototype.addListeners = function() {
     .on('mouseout.bCalendar', '.' + opts.classes.calendarDayClass, function(e) {
         e.preventDefault();
 
-        var datas = that._eventDatas($(this));
-        opts.callbacks.onDayMouseout(datas, that);
+        var data = that.unescapeDatas(that._eventDatas($(this)));
+        opts.callbacks.onDayMouseout(data, that);
 
     })
 
@@ -1216,6 +1246,7 @@ bCalendar.prototype.addListeners = function() {
     .on('click.bCalendar', '.' + opts.classes.calendarMonthClass, function(e) {
         e.preventDefault();
         var date = new Date($(this).data('date'));
+
         if (that.opts.allowDateView) {
             that.opts.mode = 'date';
             that.month = date.getMonth();
@@ -1226,6 +1257,14 @@ bCalendar.prototype.addListeners = function() {
             that.setSelectedDate(date);
         }
         that.refresh();
+
+    })
+
+    .on('click.bCalendar', '.' + opts.classes.calendarMonthClass + '.' + opts.classes.calendarEventclass, function(e) {
+        e.preventDefault();
+        var date = new Date($(this).data('date'));
+        var events = that.unescapeDatas(that.getEventsByMonth(date));
+        opts.callbacks.onMonthEventSelect(events, that);
 
     });
 
