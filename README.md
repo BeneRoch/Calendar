@@ -172,7 +172,7 @@ Name                            | Type          |   Description
  `calendarMonthClass`           |   string      |   The calendar month class, set on all TD inside the calendar (ALSO in the header)
  `calendarLinkClass`            |   string      |   The calendar link class, set on the ANCHOR object inside a day
  `calendarTextClass`            |   string      |   The calendar text class, set on the <span> object inside the <a> object of a day (calendarLinkClass)
- `calendarEventclass`           |   string      |   The calendar event class, set on the TD wrapping the day with an event
+ `calendarEventClass`           |   string      |   The calendar event class, set on the TD wrapping the day with an event
  `calendarEmptyDayClass`        |   string      |   The calendar empty day class, set on the TD wrapping a day with no date
  `calendarCurrentDayClass`      |   string      |   The calendar current day class, set on the td wrapping today's date
  `calendarSelectedDayClass`     |   string      |   The calendar selected day class, set on the td wrapping the selected date

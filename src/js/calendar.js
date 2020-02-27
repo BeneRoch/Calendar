@@ -45,8 +45,8 @@
  * `useControls                  |   boolean     |   Auto output the controls for next and prev month if set to true (default: true)
  * `events`                      |   object      |   JSON of all the events - Events can have pretty much any data, but requires at least a title and a date
  * `mode`                        |   string      |   Specifys the desired display type: Either Month or Date (default: date)
- * `allowYearView`              |   boolean     |   Define if you can see the month view (default: false, unless mode is set to 'month')
- * `allowMonthView`               |   boolean     |   Define if you can see the date view (default: false, unless mode is set to 'date')
+ * `allowYearView`               |   boolean     |   Define if you can see the month view (default: false, unless mode is set to 'month')
+ * `allowMonthView`              |   boolean     |   Define if you can see the date view (default: false, unless mode is set to 'date')
  * `displayEventsNumber`         |   boolean     |   Define if you can to display the number of events on the calendar (default: true)
  * `displayAdjacentMonthDates`   |   boolean     |   Define if you want to display the adjacent month dates or empty boxes (default: true)
  * `eventsNumberTemplate`        |   string      |   Templates used to display the number of events on a day / year / month
@@ -70,7 +70,7 @@
  *   `calendarMonthClass`        |   string      |   The calendar month class, set on all <td> inside the calendar
  *   `calendarLinkClass`         |   string      |   The calendar link class, set on the <a> object inside a day
  *   `calendarTextClass`         |   string      |   The calendar text class, set on the <span> object inside the <a> object of a day (calendarLinkClass)
- *   `calendarEventclass`        |   string      |   The calendar event class, set on the <td> wrapping the day with an event
+ *   `calendarEventClass`        |   string      |   The calendar event class, set on the <td> wrapping the day with an event
  *   `calendarEmptyDayClass`     |   string      |   The calendar empty day class, set on the <td> wrapping a day with no date
  *   `calendarCurrentDayClass`   |   string      |   The calendar current day class, set on the <td> wrapping today's date
  *   `calendarSelectedDayClass`  |   string      |   The calendar selected day class, set on the <td> wrapping the selected date
@@ -191,7 +191,7 @@
                 calendarMonthLabelClass:    'c-calendar_month_label',
                 calendarLinkClass:          'c-calendar_link',
                 calendarTextClass:          'c-calendar_text',
-                calendarEventclass:         '-event',
+                calendarEventClass:         '-event',
                 calendarCurrentDayClass:    '-today',
                 calendarSelectedDayClass:   '-selected',
                 calendarSelectedMonthClass: '-selected',
@@ -748,7 +748,7 @@ bCalendar.prototype.generateMonthView = function () {
             var events    = this.getEventsByMonth(this.year + '/' + (monthIndex + 1) + '/1');
             var hasEvents = !jQuery.isEmptyObject(events);
 
-            var extraClass = hasEvents ? ' {calendarEventclass}' : '';
+            var extraClass = hasEvents ? ' {calendarEventClass}' : '';
             var extraAttr  = '';
 
             if (this.selectedDate.getMonth() === monthIndex && this.selectedDate.getFullYear() === this.year) {
@@ -874,7 +874,7 @@ bCalendar.prototype.generateDateView = function () {
             }
 
             var hasEvents  = !jQuery.isEmptyObject(events);
-            var extraClass = hasEvents ? ' {calendarEventclass}' : '';
+            var extraClass = hasEvents ? ' {calendarEventClass}' : '';
 
             // Sets "today" on the startDate (defined in options, defaults to today)
             if (opts.startDate.getFullYear() === this.year &&
@@ -1149,7 +1149,7 @@ bCalendar.prototype.addListeners = function () {
         })
 
         // Click on a day with events
-        .on('click.bCalendar', '.' + opts.classes.calendarEventclass + '.' + opts.classes.calendarDayClass, function (e) {
+        .on('click.bCalendar', '.' + opts.classes.calendarEventClass + '.' + opts.classes.calendarDayClass, function (e) {
             e.preventDefault();
             var data = that.unescapeDatas(that._eventDatas($(this)));
 
@@ -1167,7 +1167,7 @@ bCalendar.prototype.addListeners = function () {
         })
 
         // Mouseover a day with event(s)
-        .on('mouseenter.bCalendar', '.' + opts.classes.calendarEventclass + '.' + opts.classes.calendarDayClass, function (e) {
+        .on('mouseenter.bCalendar', '.' + opts.classes.calendarEventClass + '.' + opts.classes.calendarDayClass, function (e) {
             e.preventDefault();
 
             var data = that.unescapeDatas(that._eventDatas($(this)));
@@ -1176,7 +1176,7 @@ bCalendar.prototype.addListeners = function () {
         })
 
         // Mouseout any day
-        .on('mouseout.bCalendar', '.' + opts.classes.calendarEventclass + '.' + opts.classes.calendarDayClass, function (e) {
+        .on('mouseout.bCalendar', '.' + opts.classes.calendarEventClass + '.' + opts.classes.calendarDayClass, function (e) {
             e.preventDefault();
 
             var data = that.unescapeDatas(that._eventDatas($(this)));
@@ -1250,7 +1250,7 @@ bCalendar.prototype.addListeners = function () {
             }
             that.refresh();
 
-        }).on('click.bCalendar', '.' + opts.classes.calendarMonthClass + '.' + opts.classes.calendarEventclass, function (e) {
+        }).on('click.bCalendar', '.' + opts.classes.calendarMonthClass + '.' + opts.classes.calendarEventClass, function (e) {
         e.preventDefault();
         var date   = new Date($(this).data('date'));
         var events = that.unescapeDatas(that.getEventsByMonth(date));
