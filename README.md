@@ -140,8 +140,8 @@ Name                            | Type          |   Description
  `lang`                         |   string      |   Current display language
  `mode`                         |   string      |   Current display mode. Either month or date ( Default: date )
  `useControls`                  |   boolean     |   Auto output the controls for next and prev month if set to true (default: true)
+ `allowYearView`                |   boolean     |   Define if you can see the year view (default: false, unless mode is set to 'year')
  `allowMonthView`               |   boolean     |   Define if you can see the month view (default: false, unless mode is set to 'month')
- `allowDateView`                |   boolean     |   Define if you can see the date view (default: false, unless mode is set to 'date')
  `events`                       |   object      |   JSON of all the events - Events can have pretty much any data, but requires at least a title and a date
  `displayEventsNumber`          |   boolean     |   Define if you can to display the number of events on the calendar (default: true)
  `displayAdjacentMonthDates`    |   boolean     |   Define if you want to display the adjacent month dates or empty boxes (default: true)

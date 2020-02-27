@@ -25,7 +25,7 @@
                     When you click on a month's name, you can then select a date.
                     <br/>
                     <br/>
-                    <i>Note that <b>allow_month_view</b> will be <b>forced</b> to <b>true</b> with that mode, of course</i>
+                    <i>Note that <b>allowYearView</b> will be <b>forced</b> to <b>true</b> with that mode, of course</i>
                 </p>
             </div>
 
@@ -117,31 +117,31 @@ translations: {
 
             $('.calendar-widget').calendar({
                 lang: 'fr',
-                allowDateView: false,
+                allowMonthView: false,
                 mode: 'month',
                 events : [
                     {
-                        date:"2015/01/16",
+                        date:"2019/01/16",
                         title: 'Test title',
                         content : 'Well, turns out on that date we uploaded the plugin'
                     },
                     {
-                        date:"2016/01/16",
+                        date:"2020/06/16",
                         title: 'Doc title',
                         content : 'We also updated the doc accordingly'
                     },
                     {
                         date:{
-                            start : "2016/03/17",
-                            end : "2016/08/27"
+                            start : "2020/03/17",
+                            end : "2020/08/27"
                         },
                         title: 'Changes',
                         content : 'We might add s\0ome changes during theses days'
                     },
                     {
                         date:{
-                            start : "2016/04/17",
-                            end : "2016/07/27"
+                            start : "2020/04/17",
+                            end : "2020/07/27"
                         },
                         title: 'Changes',
                         content : 'We might add s\0ome changes during theses days'
@@ -174,7 +174,7 @@ translations: {
 
             $('.calendar-widget--second').calendar({
                 lang: 'fr',
-                allow_month_view: true,
+                allowYearView: true,
                 events : [
                     {
                         date:"2015/01/16",

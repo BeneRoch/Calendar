@@ -1,12 +1,24 @@
 {
-    "private": true,
-    "name": "bCalendar",
+    "name": "beneroch-calendar",
     "title": "bCalendar",
     "version": "1.0.0",
     "author": "Bene <bene@beneroch.com>",
-    "dependencies": {
-        "jquery": ""
+    "description": "Jquery plugin that offers a calendar view to interact with data.",
+    "homepage": "http://beneroch.com/calendar/",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/BeneRoch/calendar"
     },
+    "bugs": {
+        "url": "https://github.com/BeneRoch/calendar/issues"
+    },
+    "main": "dist/js/app.js",
+    "keywords": [
+        "beneroch",
+        "calendar",
+        "events"
+    ],
     "devDependencies": {
         "autoprefixer": "6.5.2",
         "babel-preset-es2015": "6.18.0",
@@ -25,10 +37,9 @@
         "grunt-csscomb": "3.1.1",
         "grunt-eslint": "19.0.0",
         "grunt-postcss": "0.8.0",
-        "grunt-sass": "1.2.1",
-        "grunt-svgmin": "3.3.0",
-        "grunt-svgstore": "1.0.0",
+        "grunt-sass": "^2.1.0",
         "load-grunt-config": "0.19.2",
-        "postcss-banner": "3.0.0"
+        "postcss-banner": "3.0.0",
+        "jquery": "3.4.1"
     }
 }
