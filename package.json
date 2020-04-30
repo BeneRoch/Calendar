@@ -40,6 +40,6 @@
         "grunt-sass": "^2.1.0",
         "load-grunt-config": "0.19.2",
         "postcss-banner": "3.0.0",
-        "jquery": "3.4.1"
+        "jquery": "3.5.0"
     }
 }
