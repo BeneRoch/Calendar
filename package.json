@@ -37,7 +37,7 @@
         "grunt-csscomb": "3.1.1",
         "grunt-eslint": "19.0.0",
         "grunt-postcss": "0.8.0",
-        "grunt-sass": "^2.1.0",
+        "grunt-sass": "^3.1.0",
         "load-grunt-config": "0.19.2",
         "postcss-banner": "3.0.0",
         "jquery": "3.5.0"
