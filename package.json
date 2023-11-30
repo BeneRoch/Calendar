@@ -1,7 +1,7 @@
 {
     "name": "beneroch-calendar",
     "title": "bCalendar",
-    "version": "1.0.0-alpha.1",
+    "version": "2.0.0",
     "author": "Bene <bene@beneroch.com>",
     "description": "Javascript plugin that offers a calendar view to interact with data.",
     "homepage": "http://beneroch.com/calendar/",
