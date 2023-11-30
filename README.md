@@ -1,7 +1,8 @@
 # Calendar
 
 ## Description
-You can find [demo here](http://beneroch.com/calendar)
+~~You can find [demo here](http://beneroch.com/calendar)~~
+
 Home made calendar that covers events and datepicking. Every event on a day in the calendar
 returns a date object of the current target.  Note that even the header triggers these events,
 with a `null` object as a date.
@@ -11,20 +12,20 @@ Events are passed as a JSON object and each requires a title and a date. The dat
 can be a string, a timestamp or an object.  It'll be an object if the event has a beginning and an end.
 
 ## Simple date
- ```
+ ```json
  [ {
-    date : '2017/1/10',
+    date : '2023/1/10',
     content : '',
     title : ''
  } ]
  ```
 
 ### Complex date
- ```
+ ```json
  [ {
     date : {
-        start : '2017/1/10',
-        end : '2017/1/11'
+        start : '2023/1/10',
+        end : '2023/1/11'
     },
     content : '',
     title : ''
@@ -32,16 +33,16 @@ can be a string, a timestamp or an object.  It'll be an object if the event has 
  ```
 
 ### Multiple date formats
- ```
+ ```json
  [ {
     date : {
-        start : '2017/1/10',
-        end : 'january 11 2017'
+        start : '2023/1/10',
+        end : 'january 11 2023'
     },
     content : '',
     title : ''
  },{
-    date : 'september 24 2017',
+    date : 'september 24 2023',
     content : '',
     title : ''
  } ]
@@ -51,21 +52,28 @@ The calendar is easy to use and only requires minimal options.  Everything is ye
 
 #### Given the following div:
 
-```
+```html
 <div id="calendar-widget"></div>
 ```
-#### Build a french calendar (see default options)
+#### Build a calendar without jQuery
+```javascript
+let opts = {};
+let domElement = document.getElementById('calendar-widget');
+let calendar = new bCalendar(domElement, opts); // Same has $('#calendar-widget').calendar(opts)
 ```
+#### Build a french calendar (see default options)
+```javascript
 $('#calendar-widget').calendar()
 ```
+
 #### Build an english calendar
-```
+```javascript
 $('#calendar-widget').calendar({
     lang : 'en'
 })
 ```
 #### Add unsupported language
-```
+```javascript
 $('#calendar-widget').calendar({
     lang : 'customLang',
     translations: {
@@ -91,13 +99,13 @@ $('#calendar-widget').calendar({
 })
 ```
 #### Start in month view display
-```
+```javascript
 $('#calendar-widget').calendar({
     mode: 'month'
 })
 ```
 #### Add events
-```
+```javascript
 $('#calendar-widget').calendar({
     events : [
         {
@@ -125,13 +133,15 @@ $('#calendar-widget').calendar({
 });
 ```
 
-## API
+## API (jQuery)
 Name                            | Description
 --------------------------------|----------------------------------------------------------------------------------------------------------------------------
  `destroy`                      | Destroys the calendar by removing all HTML and LISTENERS
  `next`                         | Goes to next month
  `prev`                         | Goes to previous month
- `doc`                          | Returns appropriate documentation for the specified option in the list below
+ `addEvent`                     | Adds one events to the currently existing events
+ `addEvents`                    | Adds multiple events to the currently existing events
+ `setEvents`                    | Sets the calendar events destroying all previously added events
 
 ## Options
 Name                            | Type          |   Description
