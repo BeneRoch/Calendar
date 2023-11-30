@@ -7,3 +7,6 @@ error_log
 # -----------------
 vendor/
 node_modules/
+
+dist/js/bCalendar.js
+dist/styles/main.js
