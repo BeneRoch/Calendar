@@ -116,110 +116,95 @@ translations: {
         *
         * Return this (Calendar object)
         */
+        var events = [{
+            date:"<?php echo date('Y'); ?>/01/16",
+            title: 'Test title',
+            content : 'Well, turns out on that date we uploaded the plugin'
+        },
+            {
+                date:"<?php echo date('Y'); ?>/06/16",
+                title: 'Doc title',
+                content : 'We also updated the doc accordingly'
+            },
+            {
+                date:{
+                    start : "<?php echo date('Y'); ?>/03/17",
+                    end : "<?php echo date('Y'); ?>/08/27"
+                },
+                title: 'Changes',
+                content : 'We might add s\0ome changes during theses days'
+            },
+            {
+                date:{
+                    start : "<?php echo date('Y'); ?>/04/17",
+                    end : "<?php echo date('Y'); ?>/07/27"
+                },
+                title: 'Changes',
+                content : 'We might add s\0ome changes during theses days'
+            }];
+
+
         elemnt = document.getElementsByClassName('calendar-widget--third')[0];
-        calendar = new bCalendar(elemnt, {});
-        //$(document).ready(function() {
-        //    // $('.calendar-widget--third').calendar();
-        //    $('.calendar-widget--fourth').calendar({ lang : 'en' });
-        //
-        //    $('.calendar-widget').calendar({
-        //        lang: 'fr',
-        //        allowMonthView: false,
-        //        displayAdjacentMonthDates: false,
-        //        mode: 'month',
-        //        events : [
-        //            {
-        //                date:"<?php //echo date('Y'); ?>///01/16",
-        //                title: 'Test title',
-        //                content : 'Well, turns out on that date we uploaded the plugin'
-        //            },
-        //            {
-        //                date:"<?php //echo date('Y'); ?>///06/16",
-        //                title: 'Doc title',
-        //                content : 'We also updated the doc accordingly'
-        //            },
-        //            {
-        //                date:{
-        //                    start : "<?php //echo date('Y'); ?>///03/17",
-        //                    end : "<?php //echo date('Y'); ?>///08/27"
-        //                },
-        //                title: 'Changes',
-        //                content : 'We might add s\0ome changes during theses days'
-        //            },
-        //            {
-        //                date:{
-        //                    start : "<?php //echo date('Y'); ?>///04/17",
-        //                    end : "<?php //echo date('Y'); ?>///07/27"
-        //                },
-        //                title: 'Changes',
-        //                content : 'We might add s\0ome changes during theses days'
-        //            }
-        //        ],
-        //        translations:{
-        //            nextYearLabel:{
-        //                fr:"",
-        //                en:""
-        //            },
-        //            prevYearLabel:{
-        //                fr:"",
-        //                en:""
-        //            },
-        //            nextMonthLabel:{
-        //                fr:"",
-        //                en:""
-        //            },
-        //            prevMonthLabel:{
-        //                fr:"",
-        //                en:""
-        //            }
-        //        },
-        //        callbacks:{
-        //            onMonthEventSelect : function(events, calendar) {
-        //                console.log(events);
-        //            }
-        //        }
-        //    });
-        //
-        //    $('.calendar-widget--second').calendar({
-        //        lang: 'fr',
-        //        allowYearView: true,
-        //        events : [
-        //            {
-        //                date:"2015/01/16",
-        //                title: 'Test title',
-        //                content : 'Well, turns out on that date we uploaded the plugin'
-        //            },
-        //            {
-        //                date:{
-        //                start: "2015/01/16",
-        //                end: "february 1 2017"
-        //            },
-        //                title: 'Doc title',
-        //                content : 'We also u"<>pdated the doc accordingly'
-        //            },
-        //            {
-        //                date:{
-        //                    start : "2016/03/17",
-        //                    end : "2016/08/27"
-        //                },
-        //                title: 'Changes',
-        //                content : 'We might add s\0ome changes during theses days'
-        //            }
-        //        ],
-        //        callbacks: {
-        //            onEventClick: function(ev,calendar) {
-        //                var events = ev.events;
-        //                var count = events.length;
-        //                var i = 0;
-        //                var html = '';
-        //                for (; i<count; i++) {
-        //                    html += '<h3>'+events[ i ]['title']+'</h3><p>'+events[ i ]['content']+'</p>';
-        //                }
-        //                $('.event-infos').html(html);
-        //            }
-        //        }
-        //    });
-        //});
+        calendar = new bCalendar(elemnt, {
+            lang: 'fr',
+            allowMonthView: true,
+            allowYearView: true,
+            displayAdjacentMonthDates: false,
+            mode: 'month',
+            events : events,
+            translations:{
+                nextYearLabel:{
+                    fr:"",
+                    en:""
+                },
+                prevYearLabel:{
+                    fr:"",
+                    en:""
+                },
+                nextMonthLabel:{
+                    fr:"",
+                    en:""
+                },
+                prevMonthLabel:{
+                    fr:"",
+                    en:""
+                }
+            },
+            callbacks:{
+                onMonthEventSelect : function(events, calendar) {
+                    console.log(events);
+                }
+            }
+        });
+
+
+        fourthElement = document.getElementsByClassName('calendar-widget--fourth')[0];
+        fourthCalendar = new bCalendar(fourthElement, { lang: 'en' });
+
+        firstElement = document.getElementsByClassName('calendar-widget')[0];
+        firstCalendar = new bCalendar(firstElement, { allowYearView: true });
+
+        secondElement = document.getElementsByClassName('calendar-widget--second')[0];
+        secondCalendar = new bCalendar(secondElement, {
+            lang: 'fr',
+            allowYearView: true,
+            events : events,
+            callbacks: {
+                onEventClick: function(ev,calendar) {
+                    var events = ev.events;
+                    var count = events.length;
+                    var i = 0;
+                    var html = '';
+                    for (; i<count; i++) {
+                        html += '<h3>'+events[ i ]['title']+'</h3><p>'+events[ i ]['content']+'</p>';
+                    }
+                    console.log('blibli');
+                    console.log(events);
+                    console.log(ev);
+                    $('.event-infos').html(html);
+                }
+            }
+        });
 
     </script>
 

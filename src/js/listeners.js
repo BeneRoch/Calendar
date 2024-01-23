@@ -25,31 +25,36 @@ bCalendar.prototype.addListeners = function () {
 
     this.target.addEventListener('click', (e) => {
 
+        var calendarDayTarget = e.target.closest('.' + opts.classes.calendarDayClass);
         // When clicking on a day in the calendar
-        if (e.target.matches('.' + opts.classes.calendarDayClass)) {
+        if (calendarDayTarget) {
             e.preventDefault();
             e.stopPropagation();
 
-            var data = this.unescapeDatas(this._eventDatas(e.target));
+            var data = this.unescapeDatas(this._eventDatas(calendarDayTarget));
             this.setSelectedDate(data.date);
             this.refresh();
+
+            console.log(data);
 
             opts.callbacks.onDayClick(data, this);
         }
 
+        var calendarDayEventTarget = e.target.closest('.' + opts.classes.calendarEventClass + '.' + opts.classes.calendarDayClass);
         // When clicking on a day in the calendar that has the active event class
-        if (e.target.matches('.' + opts.classes.calendarEventClass + '.' + opts.classes.calendarDayClass)) {
+        if (calendarDayEventTarget) {
             e.preventDefault();
             e.stopPropagation();
 
-            var data = this.unescapeDatas(this._eventDatas(e.target));
+            var data = this.unescapeDatas(this._eventDatas(calendarDayEventTarget));
 
             opts.callbacks.onEventClick(data, this);
         }
 
         // When clicking on the calendar controls
         // Previous
-        if (e.target.matches('.' + opts.classes.calendarControlsPrevClass)) {
+        var calendarPrevControlTarget = e.target.closest('.' + opts.classes.calendarControlsPrevClass);
+        if (calendarPrevControlTarget) {
             e.preventDefault();
             e.stopPropagation();
 
@@ -64,7 +69,8 @@ bCalendar.prototype.addListeners = function () {
         }
 
         // Next
-        if (e.target.matches('.' + opts.classes.calendarControlsNextClass)) {
+        var calendarNextControlTarget = e.target.closest('.' + opts.classes.calendarControlsNextClass);
+        if (calendarNextControlTarget) {
             e.preventDefault();
             e.stopPropagation();
 
@@ -79,7 +85,8 @@ bCalendar.prototype.addListeners = function () {
         }
 
         // Month view trigger
-        if (e.target.matches('.' + opts.classes.calendarMonthLabelClass)) {
+        var calendarMonthViewControl = e.target.closest('.' + opts.classes.calendarMonthLabelClass);
+        if (calendarMonthViewControl) {
             e.preventDefault();
             e.stopPropagation();
 
@@ -91,11 +98,12 @@ bCalendar.prototype.addListeners = function () {
         }
 
         // Year view trigger
-        if (e.target.matches('.' + opts.classes.calendarMonthClass)) {
+        var calendarYearViewControl = e.target.closest('.' + opts.classes.calendarMonthClass);
+        if (calendarYearViewControl) {
             e.preventDefault();
             e.stopPropagation();
 
-            var date = new Date(e.target.dataset.date);
+            var date = new Date(calendarYearViewControl.dataset.date);
 
             if (this.opts.allowMonthView) {
                 this.opts.mode = 'month';
@@ -110,11 +118,12 @@ bCalendar.prototype.addListeners = function () {
         }
 
         // Go to month trigger
-        if (e.target.matches('.' + opts.classes.calendarMonthClass + '.' + opts.classes.calendarEventClass)) {
+        var calendarGoToMonthControl = e.target.closest('.' + opts.classes.calendarMonthClass + '.' + opts.classes.calendarEventClass);
+        if (calendarGoToMonthControl) {
             e.preventDefault();
             e.stopPropagation();
 
-            var date = new Date(e.target.dataset.date);
+            var date = new Date(calendarGoToMonthControl.dataset.date);
             var events = this.unescapeDatas(this.getEventsByMonth(date));
             opts.callbacks.onMonthEventSelect(events, this);
         }
@@ -123,36 +132,40 @@ bCalendar.prototype.addListeners = function () {
     })
 
     this.target.addEventListener('mouseenter', (e) => {
-        if (e.target.matches('.' + opts.classes.calendarDayClass)) {
+        var calendarDayTarget = e.target.closest('.' + opts.classes.calendarDayClass);
+        if (calendarDayTarget) {
             e.preventDefault();
 
-            var data = this.unescapeDatas(this._eventDatas(e.target));
+            var data = this.unescapeDatas(this._eventDatas(calendarDayTarget));
 
             opts.callbacks.onDayMouseover(data, this);
         }
 
-        if (e.target.matches('.' + opts.classes.calendarEventClass + '.' + opts.classes.calendarDayClass)) {
+        var calendarDayEventTarget = e.target.closest('.' + opts.classes.calendarEventClass + '.' + opts.classes.calendarDayClass);
+        if (calendarDayEventTarget) {
             e.preventDefault();
 
-            var data = this.unescapeDatas(this._eventDatas(e.target));
+            var data = this.unescapeDatas(this._eventDatas(calendarDayEventTarget));
 
             opts.callbacks.onEventMouseover(data, this);
         }
     })
 
     this.target.addEventListener('mouseout', (e) => {
-        if (e.target.matches('.' + opts.classes.calendarEventClass + '.' + opts.classes.calendarDayClass)) {
+        var calendarDayEventTarget = e.target.closest('.' + opts.classes.calendarEventClass + '.' + opts.classes.calendarDayClass);
+        if (calendarDayEventTarget) {
             e.preventDefault();
 
-            var data = this.unescapeDatas(this._eventDatas(e.target));
+            var data = this.unescapeDatas(this._eventDatas(calendarDayEventTarget));
 
             opts.callbacks.onEventMouseout(data, this);
         }
 
-        if (e.target.matches('.' + opts.classes.calendarDayClass)) {
+        var calendarDayTarget = e.target.closest('.' + opts.classes.calendarDayClass);
+        if (calendarDayTarget) {
             e.preventDefault();
 
-            var data = this.unescapeDatas(this._eventDatas(e.target));
+            var data = this.unescapeDatas(this._eventDatas(calendarDayTarget));
 
             opts.callbacks.onDayMouseout(data, this);
         }

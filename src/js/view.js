@@ -249,7 +249,7 @@ bCalendar.prototype.generateDateView = function () {
                 '" data-date="' + dataDate + '">';
 
             html += '<a class="{calendarLinkClass}" href="#">';
-            html += '<span class="{calendarTextClass}">';
+            // html += '<span class="{calendarTextClass}">';
 
             if (hasDay) {
                 html += day;
@@ -264,7 +264,7 @@ bCalendar.prototype.generateDateView = function () {
                 nextMonthDays++;
             }
 
-            html += '</span>';
+            // html += '</span>';
 
             var num = this.getNumEvents(currentDayDate);
             if (opts.displayEventsNumber && num !== 0 && hasDay) {
