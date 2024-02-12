@@ -14,37 +14,37 @@ can be a string, a timestamp or an object.  It'll be an object if the event has 
 ## Simple date
  ```json
  [ {
-    date : '2023/1/10',
-    content : '',
-    title : ''
+    "date" : "2024/1/10",
+    "content" : "",
+    "title" : ""
  } ]
  ```
 
 ### Complex date
  ```json
  [ {
-    date : {
-        start : '2023/1/10',
-        end : '2023/1/11'
+    "date" : {
+        "start" : "2024/1/10",
+        "end" : "2024/1/11"
     },
-    content : '',
-    title : ''
+    "content" : "",
+    "title" : ""
  } ]
  ```
 
 ### Multiple date formats
  ```json
  [ {
-    date : {
-        start : '2023/1/10',
-        end : 'january 11 2023'
+    "date" : {
+        "start" : "2024/1/10",
+        end : "january 11 2024"
     },
-    content : '',
-    title : ''
+    content : "",
+    title : ""
  },{
-    date : 'september 24 2023',
-    content : '',
-    title : ''
+    date : "september 24 2024",
+    content : "",
+    title : ""
  } ]
  ```
 ## Easy to use
@@ -109,22 +109,22 @@ $('#calendar-widget').calendar({
 $('#calendar-widget').calendar({
     events : [
         {
-            date:"2017/01/16",
+            date:"2024/01/16",
             title: 'Test title',
             content : 'Well, turns out on that date we uploaded the plugin'
         },
         {
         date:{
-            start: "2017/01/16",
-            end: "february 1 2017"
+            start: "2024/01/16",
+            end: "february 1 2024"
         },
             title: 'Doc title',
             content : 'We also u"<>pdated the doc accordingly'
         },
         {
             date:{
-                start : "2017/01/17",
-                end : "2017/01/27"
+                start : "2024/01/17",
+                end : "2024/01/27"
             },
             title: 'Changes',
             content : 'We might add s\0ome changes during theses days'
@@ -144,18 +144,19 @@ Name                            | Description
  `setEvents`                    | Sets the calendar events destroying all previously added events
 
 ## Options
-Name                            | Type          |   Description
---------------------------------|---------------|------------------------------------------------------------------------------------------------------------
- `startDate`                    |   Date Object |   Current display date ( Default: current_date )
- `lang`                         |   string      |   Current display language
- `mode`                         |   string      |   Current display mode. Either month or date ( Default: date )
- `useControls`                  |   boolean     |   Auto output the controls for next and prev month if set to true (default: true)
- `allowYearView`                |   boolean     |   Define if you can see the year view (default: false, unless mode is set to 'year')
- `allowMonthView`               |   boolean     |   Define if you can see the month view (default: false, unless mode is set to 'month')
- `events`                       |   object      |   JSON of all the events - Events can have pretty much any data, but requires at least a title and a date
- `displayEventsNumber`          |   boolean     |   Define if you can to display the number of events on the calendar (default: true)
- `displayAdjacentMonthDates`    |   boolean     |   Define if you want to display the adjacent month dates or empty boxes (default: true)
- `eventsNumberTemplate`         |   string      |   Templates used to display the number of events on a day / year / month
+Name                            | Type        |   Description
+--------------------------------|-------------|------------------------------------------------------------------------------------------------------------
+ `startDate`                    | Date Object |   Current display date ( Default: today )
+ `showStartDate`                | Boolean     |   Show indicator of the startDate ( Default: true )
+ `lang`                         | string      |   Current display language
+ `mode`                         | string      |   Current display mode. Either month or date ( Default: date )
+ `useControls`                  | boolean     |   Auto output the controls for next and prev month if set to true (default: true)
+ `allowYearView`                | boolean     |   Define if you can see the year view (default: false, unless mode is set to 'year')
+ `allowMonthView`               | boolean     |   Define if you can see the month view (default: false, unless mode is set to 'month')
+ `events`                       | object      |   JSON of all the events - Events can have pretty much any data, but requires at least a title and a date
+ `displayEventsNumber`          | boolean     |   Define if you can to display the number of events on the calendar (default: true)
+ `displayAdjacentMonthDates`    | boolean     |   Define if you want to display the adjacent month dates or empty boxes (default: true)
+ `eventsNumberTemplate`         | string      |   Templates used to display the number of events on a day / year / month
 
 ### translations
 Name                            | Type          |   Description
