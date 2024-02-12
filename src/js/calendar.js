@@ -108,7 +108,9 @@ var bCalendar = function (target, options) {
     this.events = {};
 
     // Today || custom date.
-    this.setSelectedDate(opts.startDate);
+    this.setStartDate(opts.startDate); // Init date for reference
+    this.setSelectedDate(opts.startDate); // Select the init date
+    this.showStartDate = opts.showStartDate;
     this.loadEvents();
 
     this.month = this.selectedDate.getMonth();
@@ -460,6 +462,21 @@ bCalendar.prototype.goToDate = function (date) {
     // Refresh view
     this.refresh();
 
+    return this;
+};
+
+/**
+ * Sets the start date.
+ * The start date only purpose is to have a clear mark on the calendar with "calendarCurrentDayClass" option
+ * Could be a date object or a string
+ * @param {Date|string} date Selected date.
+ * @return {this} Chainable.
+ */
+bCalendar.prototype.setStartDate = function (date) {
+    if (!(date instanceof Date)) {
+        date = new Date(date);
+    }
+    this.startDate = date;
     return this;
 };
 

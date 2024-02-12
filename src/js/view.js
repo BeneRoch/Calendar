@@ -114,7 +114,7 @@ bCalendar.prototype.generateMonthView = function () {
 
             html += '<td class="{calendarMonthClass}' + extraClass + '"' + extraAttr +
                 ' data-date="' + this.year + '/' + (monthIndex + 1) + '/1' + '">' +
-                '   <a class="{calendarLinkClass}" href="#"><span class="{calendarTextClass}">';
+                '   <button class="{calendarLinkClass}"><span class="{calendarTextClass}">';
             html += monthLabel;
             html += '</span>';
 
@@ -124,7 +124,7 @@ bCalendar.prototype.generateMonthView = function () {
                 });
                 html += numTemplate;
             }
-            html += '</a></td>';
+            html += '</button></td>';
         }
 
         html += '</tr>';
@@ -170,10 +170,10 @@ bCalendar.prototype.generateDateView = function () {
 
     var html = '<div class="{mainCalendarClass}">' +
         '<p class="{calendarTitleClass}">' +
-        '<a href="#" class="{calendarMonthLabelClass}">' +
+        '<button href="#" class="{calendarMonthLabelClass}">' +
         '<span class="{calendarTitleMonthClass}">{monthName} </span>' +
         '<span class="{calendarTitleYearClass}">{year}</span>' +
-        '</a>' +
+        '</button>' +
         '</p>';
 
     // Calendar Controls
@@ -230,11 +230,13 @@ bCalendar.prototype.generateDateView = function () {
             var extraClass = hasEvents ? ' {calendarEventClass}' : '';
 
             // Sets "today" on the startDate (defined in options, defaults to today)
-            if (this.selectedDate.getFullYear() === this.year &&
-                this.selectedDate.getMonth() === this.month &&
-                this.selectedDate.getDate() === day &&
-                hasDay) {
-                extraClass += ' {calendarCurrentDayClass}';
+            if (this.showStartDate) {
+                if (this.startDate.getFullYear() === this.year &&
+                    this.startDate.getMonth() === this.month &&
+                    this.startDate.getDate() === day &&
+                    hasDay) {
+                    extraClass += ' {calendarCurrentDayClass}';
+                }
             }
 
             // Sets "selected" class on the currently selected date.
@@ -248,7 +250,7 @@ bCalendar.prototype.generateDateView = function () {
             html += '<td class="{calendarDayClass}' + (hasDay ? '' : ' {calendarEmptyDayClass}') + extraClass +
                 '" data-date="' + dataDate + '">';
 
-            html += '<a class="{calendarLinkClass}" href="#">';
+            html += '<button class="{calendarLinkClass}">';
             // html += '<span class="{calendarTextClass}">';
 
             if (hasDay) {
@@ -274,7 +276,7 @@ bCalendar.prototype.generateDateView = function () {
                 html += numTemplate;
             }
 
-            html += '</a>';
+            html += '</button>';
             html += '</td>';
         }
         // stop making rows if we've run out of days

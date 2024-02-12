@@ -5,6 +5,7 @@
  */
 bCalendar.defaults = {
     startDate:            new Date(),
+    showStartDate:        true,
     lang:                 'fr',
     mode:                 'month',
     allowYearView:        false,

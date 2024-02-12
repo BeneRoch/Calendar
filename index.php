@@ -147,6 +147,7 @@ translations: {
         elemnt = document.getElementsByClassName('calendar-widget--third')[0];
         calendar = new bCalendar(elemnt, {
             lang: 'fr',
+            showStartDate: false,
             allowMonthView: true,
             allowYearView: true,
             displayAdjacentMonthDates: false,
