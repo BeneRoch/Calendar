@@ -37,14 +37,14 @@ can be a string, a timestamp or an object.  It'll be an object if the event has 
  [ {
     "date" : {
         "start" : "2024/1/10",
-        end : "january 11 2024"
+        "end" : "january 11 2024"
     },
-    content : "",
-    title : ""
+    "content" : "",
+    "title" : ""
  },{
-    date : "september 24 2024",
-    content : "",
-    title : ""
+    "date" : "september 24 2024",
+    "content" : "",
+    "title" : ""
  } ]
  ```
 ## Easy to use
