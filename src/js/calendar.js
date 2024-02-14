@@ -109,12 +109,15 @@ var bCalendar = function (target, options) {
 
     // Today || custom date.
     this.setStartDate(opts.startDate); // Init date for reference
-    this.setSelectedDate(opts.startDate); // Select the init date
     this.showStartDate = opts.showStartDate;
+
+    if (typeof opts.selectedDate !== 'undefined') {
+        this.setSelectedDate(opts.startDate); // Select the init date
+    }
     this.loadEvents();
 
-    this.month = this.selectedDate.getMonth();
-    this.year  = this.selectedDate.getFullYear();
+    this.month = this.startDate.getMonth();
+    this.year  = this.startDate.getFullYear();
 
     this.html = '';
 

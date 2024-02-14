@@ -103,8 +103,10 @@ bCalendar.prototype.generateMonthView = function () {
             var extraClass = hasEvents ? ' {calendarEventClass}' : '';
             var extraAttr  = '';
 
-            if (this.selectedDate.getMonth() === monthIndex && this.selectedDate.getFullYear() === this.year) {
-                extraClass += ' {calendarSelectedMonthClass}';
+            if (this.selectedDate instanceof Date) {
+                if (this.selectedDate.getMonth() === monthIndex && this.selectedDate.getFullYear() === this.year) {
+                    extraClass += ' {calendarSelectedMonthClass}';
+                }
             }
 
             num = this.getNumEvents(monthDate, 'month');
@@ -240,11 +242,13 @@ bCalendar.prototype.generateDateView = function () {
             }
 
             // Sets "selected" class on the currently selected date.
-            if (this.selectedDate.getFullYear() === this.year &&
-                this.selectedDate.getMonth() === this.month &&
-                this.selectedDate.getDate() === day &&
-                hasDay) {
-                extraClass += ' {calendarSelectedDayClass}';
+            if (this.selectedDate instanceof Date) {
+                if (this.selectedDate.getFullYear() === this.year &&
+                    this.selectedDate.getMonth() === this.month &&
+                    this.selectedDate.getDate() === day &&
+                    hasDay) {
+                    extraClass += ' {calendarSelectedDayClass}';
+                }
             }
 
             html += '<td class="{calendarDayClass}' + (hasDay ? '' : ' {calendarEmptyDayClass}') + extraClass +
