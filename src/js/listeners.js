@@ -14,7 +14,6 @@
  * @return this (chainable)
  */
 bCalendar.prototype.removeListeners = function () {
-    console.log('removing listeners somehow');
     // this.target.removeEventListener('click');
     // this.target.removeEventListener('mouseenter');
     // this.target.removeEventListener('mouseout');
@@ -34,8 +33,6 @@ bCalendar.prototype.addListeners = function () {
             var data = this.unescapeDatas(this._eventDatas(calendarDayTarget));
             this.setSelectedDate(data.date);
             this.refresh();
-
-            console.log(data);
 
             opts.callbacks.onDayClick(data, this);
         }
