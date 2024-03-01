@@ -1,4 +1,3 @@
-
 /**
  * Generates the HTML considering all the events and options
  * Automatic generations from a date
@@ -254,8 +253,11 @@ bCalendar.prototype.generateDateView = function () {
             html += '<td class="{calendarDayClass}' + (hasDay ? '' : ' {calendarEmptyDayClass}') + extraClass +
                 '" data-date="' + dataDate + '">';
 
-            html += '<button class="{calendarLinkClass}">';
-            // html += '<span class="{calendarTextClass}">';
+            var hasButton = (hasDay && opts.displayAdjacentMonthDates);
+
+            if (hasButton) {
+                html += '<button class="{calendarLinkClass}">';
+            }
 
             if (hasDay) {
                 html += day;
@@ -266,7 +268,9 @@ bCalendar.prototype.generateDateView = function () {
                 }
                 previousMonthDifferencial++;
             } else {
-                html += nextMonthDays;
+                if (opts.displayAdjacentMonthDates) {
+                    html += nextMonthDays;
+                }
                 nextMonthDays++;
             }
 
@@ -279,8 +283,9 @@ bCalendar.prototype.generateDateView = function () {
                 });
                 html += numTemplate;
             }
-
-            html += '</button>';
+            if (hasButton) {
+                html += '</button>';
+            }
             html += '</td>';
         }
         // stop making rows if we've run out of days

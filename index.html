@@ -12,11 +12,6 @@
     <script type="text/javascript" src="dist/js/vendors.js"></script>
     <script type="text/javascript" src="dist/js/app.js"></script>
     <link rel="stylesheet" href="dist/styles/main.css">
-
-    <!--
-          <script type="text/javascript" src="src/calendar.js"></script>
-          <link rel="stylesheet" href="styles/styles.css"
-          -->
 </head>
 
 <body>
@@ -152,7 +147,7 @@ translations: {
         allowMonthView: true,
         allowYearView: true,
         displayAdjacentMonthDates: false,
-        mode: 'month',
+        mode: 'year',
         events : events,
         translations:{
             nextYearLabel:{
@@ -174,7 +169,6 @@ translations: {
         },
         callbacks:{
             onMonthEventSelect : function(events, calendar) {
-                console.log(events);
             }
         }
     });
@@ -200,9 +194,6 @@ translations: {
                 for (; i<count; i++) {
                     html += '<h3>'+events[ i ]['title']+'</h3><p>'+events[ i ]['content']+'</p>';
                 }
-                console.log('blibli');
-                console.log(events);
-                console.log(ev);
                 $('.event-infos').html(html);
             }
         }
