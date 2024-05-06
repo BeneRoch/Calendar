@@ -111,9 +111,10 @@ var bCalendar = function (target, options) {
     this.setStartDate(opts.startDate); // Init date for reference
     this.showStartDate = opts.showStartDate;
 
-    if (typeof opts.selectedDate !== 'undefined') {
-        this.setSelectedDate(opts.startDate); // Select the init date
+    if ((typeof opts.selectedDate !== 'undefined')) {
+        this.setSelectedDate(opts.selectedDate);
     }
+
     this.loadEvents();
 
     this.month = this.startDate.getMonth();
